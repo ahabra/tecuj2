@@ -21,7 +21,7 @@ public class DbReaderTest {
 		DbHelper.configureDb(sut);
 		DbHelper.configureDb(dbWriter);
 		dbWriter.sql("drop table if exists PlayEntity;").write();
-		dbWriter.writeFromFile("DbReaderTest.sql");
+		dbWriter.scriptFromFile("DbReaderTest.sql").write();
 	}
 
 	@Test

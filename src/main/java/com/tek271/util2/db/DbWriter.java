@@ -1,12 +1,13 @@
 package com.tek271.util2.db;
 
 import com.google.common.base.Splitter;
-import com.tek271.util2.files.ResourceTools;
 import org.sql2o.Connection;
 import org.sql2o.Query;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 public class DbWriter extends DbAccessor<DbWriter> {
-	private ResourceTools resourceTools = new ResourceTools();
+	private static final long NO_KEY = Long.MIN_VALUE;
 	private boolean isReturnKey;
 
 	protected DbWriter getThis() {
@@ -19,6 +20,10 @@ public class DbWriter extends DbAccessor<DbWriter> {
 	}
 
 	public long write() {
+		if (isNotBlank(script)) {
+			writeScript();
+			return NO_KEY;
+		}
 		return isExternalConnection? write(connection) : writeAndClose();
 	}
 
@@ -28,7 +33,7 @@ public class DbWriter extends DbAccessor<DbWriter> {
 		if (isReturnKey) {
 			return con.getKey(long.class);
 		}
-		return Long.MIN_VALUE;
+		return NO_KEY;
 	}
 
 	private long writeAndClose() {
@@ -37,20 +42,18 @@ public class DbWriter extends DbAccessor<DbWriter> {
 		}
 	}
 
-	public void writeFromFile(String fileName) {
-		Iterable<String> queries = readQueriesFromFile(fileName);
-		returnKeyAfterWrite(false);
-		try (Connection con= getSql2oConnection()) {
-			withConnection(con);
-			for (String sql: queries) {
-				sql(sql).write();
-			}
-		}
-	}
+	private void writeScript() {
+		Iterable<String> queries = Splitter.on(";\n").trimResults().omitEmptyStrings().split(script);
+		Connection con = getSql2oConnection();
+		DbWriter dbWriter = new DbWriter().withConnection(con);
 
-	private Iterable<String> readQueriesFromFile(String fileName) {
-		String text = resourceTools.readAsString(fileName);
-		return Splitter.on(";\n").trimResults().omitEmptyStrings().split(text);
+		try {
+			for (String sql: queries) {
+				dbWriter.sql(sql).write();
+			}
+		} finally {
+			if (!isExternalConnection) con.close();
+		}
 	}
 
 }

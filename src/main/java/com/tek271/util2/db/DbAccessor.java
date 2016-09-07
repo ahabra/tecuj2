@@ -1,5 +1,6 @@
 package com.tek271.util2.db;
 
+import com.tek271.util2.files.ResourceTools;
 import com.tek271.util2.files.YamlTools;
 import org.sql2o.Connection;
 import org.sql2o.Query;
@@ -13,8 +14,11 @@ public abstract class DbAccessor<T extends DbAccessor> {
 	protected final Map<String, Object> parameters = new HashMap<>();
 	protected Map<String, String> namedQueries;
 	protected String sql;
+	protected String script;
 	protected Connection connection;
 	protected boolean isExternalConnection = false;
+
+	protected ResourceTools resourceTools = new ResourceTools();
 
 	private T thisObj; // used to simplify the builder pattern
 	protected abstract T getThis();
@@ -67,11 +71,23 @@ public abstract class DbAccessor<T extends DbAccessor> {
 
 	public T sql(String sql) {
 		this.sql = sql;
+		this.script = null;
 		return thisObj;
 	}
 
 	public T sqlFromNamedQuery(String queryName) {
 		return sql(getQueryByName(queryName));
+	}
+
+	public T script(String script) {
+		this.script = script;
+		this.sql = null;
+		return thisObj;
+	}
+
+	public T scriptFromFile(String fileName) {
+		String text = resourceTools.readAsString(fileName);
+		return script(text);
 	}
 
 	protected Query createQuery(Connection con) {
