@@ -11,7 +11,7 @@ import static org.apache.commons.lang3.StringUtils.trimToEmpty;
 
 public class YamlTools {
 	@VisibleForTesting
-	public ResourceTools resourceTools = new ResourceTools();
+	ResourceTools resourceTools = new ResourceTools();
 
 	public Map<String, String> readFile(String fileName) {
 		Map<String, String> result = new HashMap<>();

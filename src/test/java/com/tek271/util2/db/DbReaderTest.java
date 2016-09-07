@@ -66,4 +66,10 @@ public class DbReaderTest {
 		assertEquals(inserted, found);
 	}
 
+	@Test
+	public void testNamedQueriesFromYamlFile() {
+		sut.namedQueries("YamlToolsTest.yml");
+		assertEquals(2, sut.namedQueries.size());
+	}
+
 }

@@ -1,5 +1,6 @@
 package com.tek271.util2.db;
 
+import com.tek271.util2.files.YamlTools;
 import org.sql2o.Connection;
 import org.sql2o.Query;
 import org.sql2o.Sql2o;
@@ -41,16 +42,10 @@ public abstract class DbAccessor<T extends DbAccessor> {
 		return thisObj;
 	}
 
-	private Sql2o sql2o() {
-		return new Sql2o(url, user, password);
-	}
-
-	public Connection getSql2oConnection() {
-		return sql2o().open();
-	}
-
-	public Connection transaction() {
-		return sql2o().beginTransaction();
+	public T namedQueries(String yamlFileName) {
+		YamlTools yamlTools = new YamlTools();
+		Map<String, String> map = yamlTools.readFile(yamlFileName);
+		return namedQueries(map);
 	}
 
 	public T param(String name, Object value) {
@@ -73,6 +68,18 @@ public abstract class DbAccessor<T extends DbAccessor> {
 
 	protected String getQueryByName(String queryName) {
 		return namedQueries.get(queryName);
+	}
+
+	private Sql2o sql2o() {
+		return new Sql2o(url, user, password);
+	}
+
+	public Connection getSql2oConnection() {
+		return sql2o().open();
+	}
+
+	public Connection transaction() {
+		return sql2o().beginTransaction();
 	}
 
 }
