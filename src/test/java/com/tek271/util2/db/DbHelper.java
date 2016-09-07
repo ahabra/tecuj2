@@ -19,7 +19,8 @@ public class DbHelper {
 		for (PlayEntity e: entities) {
 			e.id = dbWriter.param("name", e.name)
 					.param("date", e.date)
-					.write(PlayEntity.INSERT_SQL, true);
+					.sql(PlayEntity.INSERT_SQL)
+					.write(true);
 			result.add(e);
 		}
 		return result;

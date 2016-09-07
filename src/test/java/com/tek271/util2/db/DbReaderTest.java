@@ -20,7 +20,7 @@ public class DbReaderTest {
 
 		DbHelper.configureDb(sut);
 		DbHelper.configureDb(dbWriter);
-		dbWriter.write("drop table if exists PlayEntity;");
+		dbWriter.sql("drop table if exists PlayEntity;").write();
 		dbWriter.writeFromFile("DbReaderTest.sql");
 	}
 
@@ -51,7 +51,9 @@ public class DbReaderTest {
 	@Test
 	public void testWriteThenRead() {
 		List<PlayEntity> inserted = DbHelper.insertPlayEntities(3);
-		List<PlayEntity> found = sut.read("select * from PlayEntity");
+		List<PlayEntity> found = sut
+				.sql("select * from PlayEntity")
+				.read();
 
 		assertEquals(inserted, found);
 	}
@@ -62,7 +64,7 @@ public class DbReaderTest {
 		Map<String, String> map = ImmutableMap.of("k1", "select * from PlayEntity");
 		sut.namedQueries(map);
 
-		List<PlayEntity> found = sut.readNamedQuery("k1");
+		List<PlayEntity> found = sut.sqlFromNamedQuery("k1").read();
 		assertEquals(inserted, found);
 	}
 

@@ -23,7 +23,7 @@ public class DbWriterTest {
 
 		DbHelper.configureDb(dbReader);
 		DbHelper.configureDb(dbWriter);
-		dbWriter.write("drop table if exists PlayEntity;");
+		dbWriter.sql("drop table if exists PlayEntity;").write();
 		dbWriter.writeFromFile("DbReaderTest.sql");
 	}
 
@@ -34,11 +34,12 @@ public class DbWriterTest {
 			for (PlayEntity e: entities) {
 				e.id = dbWriter.param("name", e.name)
 						.param("date", e.date)
-						.write(PlayEntity.INSERT_SQL, true, con);
+						.sql(PlayEntity.INSERT_SQL)
+						.write(true, con);
 			}
 			con.commit();
 		}
-		List<PlayEntity> found = dbReader.read("select * from PlayEntity");
+		List<PlayEntity> found = dbReader.sql("select * from PlayEntity").read();
 		assertEquals(entities, found);
 	}
 
@@ -50,8 +51,9 @@ public class DbWriterTest {
 				.namedQueries(map)
 				.param("name", playEntity.name)
 				.param("date", playEntity.date)
-				.writeNamedQuery("k1");
-		List<PlayEntity> found = dbReader.read("select * from PlayEntity");
+				.sqlFromNamedQuery("k1")
+				.write();
+		List<PlayEntity> found = dbReader.sql("select * from PlayEntity").read();
 		assertEquals(1, found.size());
 		assertEquals(playEntity, found.get(0));
 	}
@@ -64,10 +66,12 @@ public class DbWriterTest {
 				.namedQueries(map)
 				.param("name", playEntity.name)
 				.param("date", playEntity.date)
-				.writeNamedQuery("k1", true);
-		List<PlayEntity> found = dbReader.read("select * from PlayEntity");
+				.sqlFromNamedQuery("k1")
+				.write(true);
+		List<PlayEntity> found = dbReader.sql("select * from PlayEntity").read();
 		assertEquals(0, id);
 		assertEquals(1, found.size());
 		assertEquals(playEntity, found.get(0));
 	}
+
 }

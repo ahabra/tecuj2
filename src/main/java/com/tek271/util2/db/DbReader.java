@@ -17,17 +17,11 @@ public class DbReader<E> extends DbAccessor<DbReader<E>> {
 		this.entityType = entityType;
 	}
 
-	public List<E> read(String sql) {
-
+	public List<E> read() {
 		try (Connection con = getSql2oConnection()) {
-			Query query = createQuery(con, sql);
+			Query query = createQuery(con);
 			return query.executeAndFetch(entityType);
 		}
 	}
-
-	public List<E> readNamedQuery(String queryName) {
-		return read(getQueryByName(queryName));
-	}
-
 
 }

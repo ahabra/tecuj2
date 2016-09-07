@@ -14,8 +14,8 @@ public class DbWriter extends DbAccessor<DbWriter> {
 		return this;
 	}
 
-	public long write(String sql, boolean isReturnKey, Connection con) {
-		Query query = createQuery(con, sql);
+	public long write(boolean isReturnKey, Connection con) {
+		Query query = createQuery(con);
 		query.executeUpdate();
 		if (isReturnKey) {
 			return con.getKey(long.class);
@@ -23,29 +23,22 @@ public class DbWriter extends DbAccessor<DbWriter> {
 		return Long.MIN_VALUE;
 	}
 
-	public long write(String sql, boolean isReturnKey) {
+	public long write(boolean isReturnKey) {
 		try (Connection con= getSql2oConnection()) {
-			return write(sql, isReturnKey, con);
+			return write(isReturnKey, con);
 		}
 	}
 
-	public void write(String sql) {
-		write(sql, false);
-	}
-
-	public long writeNamedQuery(String queryName, boolean isReturnKey) {
-		return write(getQueryByName(queryName), isReturnKey);
-	}
-
-	public void writeNamedQuery(String queryName) {
-		writeNamedQuery(queryName, false);
+	public void write() {
+		write(false);
 	}
 
 	public void writeFromFile(String fileName) {
 		Iterable<String> queries = readQueriesFromFile(fileName);
 		try (Connection con= getSql2oConnection()) {
 			for (String sql: queries) {
-				write(sql, false, con);
+				sql(sql);
+				write(false, con);
 			}
 		}
 	}

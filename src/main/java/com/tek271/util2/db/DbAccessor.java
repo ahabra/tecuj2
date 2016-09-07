@@ -9,12 +9,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class DbAccessor<T extends DbAccessor> {
-	String url;
-	String user;
-	String password;
+	String url, user, password;
 	final Map<String, Object> parameters = new HashMap<>();
 	Map<String, String> namedQueries;
-	private T thisObj;
+	String sql;
+
+	private T thisObj; // used to simplify the builder pattern
 
 	protected abstract T getThis();
 
@@ -58,7 +58,16 @@ public abstract class DbAccessor<T extends DbAccessor> {
 		return thisObj;
 	}
 
-	protected Query createQuery(Connection con, String sql) {
+	public T sql(String sql) {
+		this.sql = sql;
+		return thisObj;
+	}
+
+	public T sqlFromNamedQuery(String queryName) {
+		return sql(getQueryByName(queryName));
+	}
+
+	protected Query createQuery(Connection con) {
 		Query query = con.createQuery(sql);
 		if (parameters != null) {
 			parameters.forEach(query::addParameter);
