@@ -1,20 +1,28 @@
 package com.tek271.util2.db;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Splitter;
 import com.tek271.util2.files.ResourceTools;
 import org.sql2o.Connection;
 import org.sql2o.Query;
 
 public class DbWriter extends DbAccessor<DbWriter> {
-	@VisibleForTesting
-	ResourceTools resourceTools = new ResourceTools();
+	private ResourceTools resourceTools = new ResourceTools();
+	private boolean isReturnKey;
 
 	protected DbWriter getThis() {
 		return this;
 	}
 
-	public long write(boolean isReturnKey, Connection con) {
+	public DbWriter returnKeyAfterWrite(boolean isReturnKey) {
+		this.isReturnKey = isReturnKey;
+		return this;
+	}
+
+	public long write() {
+		return isExternalConnection? write(connection) : writeAndClose();
+	}
+
+	private long write(Connection con) {
 		Query query = createQuery(con);
 		query.executeUpdate();
 		if (isReturnKey) {
@@ -23,22 +31,19 @@ public class DbWriter extends DbAccessor<DbWriter> {
 		return Long.MIN_VALUE;
 	}
 
-	public long write(boolean isReturnKey) {
+	private long writeAndClose() {
 		try (Connection con= getSql2oConnection()) {
-			return write(isReturnKey, con);
+			return write(con);
 		}
-	}
-
-	public void write() {
-		write(false);
 	}
 
 	public void writeFromFile(String fileName) {
 		Iterable<String> queries = readQueriesFromFile(fileName);
+		returnKeyAfterWrite(false);
 		try (Connection con= getSql2oConnection()) {
+			withConnection(con);
 			for (String sql: queries) {
-				sql(sql);
-				write(false, con);
+				sql(sql).write();
 			}
 		}
 	}

@@ -20,7 +20,8 @@ public class DbHelper {
 			e.id = dbWriter.param("name", e.name)
 					.param("date", e.date)
 					.sql(PlayEntity.INSERT_SQL)
-					.write(true);
+					.returnKeyAfterWrite(true)
+					.write();
 			result.add(e);
 		}
 		return result;

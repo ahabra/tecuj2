@@ -35,7 +35,9 @@ public class DbWriterTest {
 				e.id = dbWriter.param("name", e.name)
 						.param("date", e.date)
 						.sql(PlayEntity.INSERT_SQL)
-						.write(true, con);
+						.returnKeyAfterWrite(true)
+						.withConnection(con)
+						.write();
 			}
 			con.commit();
 		}
@@ -59,7 +61,7 @@ public class DbWriterTest {
 	}
 
 	@Test
-	public void testwriteNamedQueryAndGetId() {
+	public void testWriteNamedQueryAndGetId() {
 		Map<String, String> map = ImmutableMap.of("k1", PlayEntity.INSERT_SQL);
 		PlayEntity playEntity = create(1);
 		long id = dbWriter
@@ -67,7 +69,8 @@ public class DbWriterTest {
 				.param("name", playEntity.name)
 				.param("date", playEntity.date)
 				.sqlFromNamedQuery("k1")
-				.write(true);
+				.returnKeyAfterWrite(true)
+				.write();
 		List<PlayEntity> found = dbReader.sql("select * from PlayEntity").read();
 		assertEquals(0, id);
 		assertEquals(1, found.size());

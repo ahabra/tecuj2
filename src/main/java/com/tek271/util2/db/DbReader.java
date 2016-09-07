@@ -18,10 +18,19 @@ public class DbReader<E> extends DbAccessor<DbReader<E>> {
 	}
 
 	public List<E> read() {
+		return isExternalConnection? read(connection) : readAndClose();
+	}
+
+	private List<E> read(Connection con) {
+		Query query = createQuery(con);
+		return query.executeAndFetch(entityType);
+	}
+
+	private List<E> readAndClose() {
 		try (Connection con = getSql2oConnection()) {
-			Query query = createQuery(con);
-			return query.executeAndFetch(entityType);
+			return read(con);
 		}
 	}
+
 
 }

@@ -9,17 +9,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class DbAccessor<T extends DbAccessor> {
-	String url, user, password;
-	final Map<String, Object> parameters = new HashMap<>();
-	Map<String, String> namedQueries;
-	String sql;
+	protected String url, user, password;
+	protected final Map<String, Object> parameters = new HashMap<>();
+	protected Map<String, String> namedQueries;
+	protected String sql;
+	protected Connection connection;
+	protected boolean isExternalConnection = false;
 
 	private T thisObj; // used to simplify the builder pattern
-
 	protected abstract T getThis();
 
 	public DbAccessor() {
 		thisObj = getThis();
+	}
+
+	public T withConnection(Connection connection) {
+		isExternalConnection = connection != null;
+		this.connection = connection;
+		return thisObj;
 	}
 
 	public T url(String url) {
@@ -84,6 +91,9 @@ public abstract class DbAccessor<T extends DbAccessor> {
 	}
 
 	public Connection getSql2oConnection() {
+		if (connection != null) {
+			return connection;
+		}
 		return sql2o().open();
 	}
 
