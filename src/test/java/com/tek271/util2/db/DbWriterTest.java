@@ -34,7 +34,7 @@ public class DbWriterTest {
 			for (PlayEntity e: entities) {
 				e.id = dbWriter.param("name", e.name)
 						.param("date", e.date)
-						.write(con, true, PlayEntity.INSERT_SQL);
+						.write(PlayEntity.INSERT_SQL, true, con);
 			}
 			con.commit();
 		}
@@ -64,7 +64,7 @@ public class DbWriterTest {
 				.namedQueries(map)
 				.param("name", playEntity.name)
 				.param("date", playEntity.date)
-				.writeNamedQueryAndGetId("k1");
+				.writeNamedQuery("k1", true);
 		List<PlayEntity> found = dbReader.read("select * from PlayEntity");
 		assertEquals(0, id);
 		assertEquals(1, found.size());

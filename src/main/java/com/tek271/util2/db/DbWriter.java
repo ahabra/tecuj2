@@ -8,13 +8,13 @@ import org.sql2o.Query;
 
 public class DbWriter extends DbAccessor<DbWriter> {
 	@VisibleForTesting
-	public ResourceTools resourceTools = new ResourceTools();
+	ResourceTools resourceTools = new ResourceTools();
 
 	protected DbWriter getThis() {
 		return this;
 	}
 
-	public long write(Connection con, boolean isReturnKey, String sql) {
+	public long write(String sql, boolean isReturnKey, Connection con) {
 		Query query = createQuery(con, sql);
 		query.executeUpdate();
 		if (isReturnKey) {
@@ -23,33 +23,29 @@ public class DbWriter extends DbAccessor<DbWriter> {
 		return Long.MIN_VALUE;
 	}
 
-	private long write(boolean isReturnKey, String sql) {
+	public long write(String sql, boolean isReturnKey) {
 		try (Connection con= getSql2oConnection()) {
-			return write(con, isReturnKey, sql);
+			return write(sql, isReturnKey, con);
 		}
 	}
 
 	public void write(String sql) {
-		write(false, sql);
+		write(sql, false);
 	}
 
-	public long writeAndGetId(String sql) {
-		return write(true, sql);
+	public long writeNamedQuery(String queryName, boolean isReturnKey) {
+		return write(getQueryByName(queryName), isReturnKey);
 	}
 
 	public void writeNamedQuery(String queryName) {
-		write(getQueryByName(queryName));
-	}
-
-	public long writeNamedQueryAndGetId(String queryName ) {
-		return writeAndGetId(getQueryByName(queryName));
+		writeNamedQuery(queryName, false);
 	}
 
 	public void writeFromFile(String fileName) {
 		Iterable<String> queries = readQueriesFromFile(fileName);
 		try (Connection con= getSql2oConnection()) {
 			for (String sql: queries) {
-				write(con, false, sql);
+				write(sql, false, con);
 			}
 		}
 	}
