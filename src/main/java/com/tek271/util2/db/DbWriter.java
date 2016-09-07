@@ -14,7 +14,7 @@ public class DbWriter extends DbAccessor<DbWriter> {
 		return this;
 	}
 
-	private long write(Connection con, boolean isReturnKey, String sql) {
+	public long write(Connection con, boolean isReturnKey, String sql) {
 		Query query = createQuery(con, sql);
 		query.executeUpdate();
 		if (isReturnKey) {
@@ -41,7 +41,7 @@ public class DbWriter extends DbAccessor<DbWriter> {
 		write(getQueryByName(queryName));
 	}
 
-	public long writeNAmedQueryAndGetId(String queryName ) {
+	public long writeNamedQueryAndGetId(String queryName ) {
 		return writeAndGetId(getQueryByName(queryName));
 	}
 

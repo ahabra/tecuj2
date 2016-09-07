@@ -1,89 +1,69 @@
 package com.tek271.util2.db;
 
 import com.google.common.collect.ImmutableMap;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class DbReaderTest {
-	private static final String DATE= "2016.09.07";
 	private DbReader<PlayEntity> sut;
-	private DbWriter dbWriter;
-	private Map<String, String> dbConfig;
-
-
-	public static class PlayEntity {
-		public long id;
-		public String name;
-		public String date;
-
-		public String toInsertSql() {
-			return "insert into PlayEntity (name, date) values (:name, :date)";
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			return EqualsBuilder.reflectionEquals(this, obj);
-		}
-
-		@Override
-		public int hashCode() {
-			return HashCodeBuilder.reflectionHashCode(this);
-		}
-
-		public static PlayEntity create(int counter) {
-			PlayEntity e = new PlayEntity();
-			e.name = "name-" + counter;
-			e.date = DATE;
-			return e;
-		}
-	}
 
 	@Before
 	public void setUp() {
 		sut = new DbReader<>(PlayEntity.class);
-		dbWriter = new DbWriter();
-		dbConfig = ImmutableMap.<String, String>builder()
-				.put("url", "jdbc:hsqldb:mem:tecuj-test")
-				.put("driver", "org.hsqldb.jdbc.JDBCDriver")
-				.put("user", "SA")
-				.put("password", "SA")
-				.build();
-		setDbConfig(sut);
-		setDbConfig(dbWriter);
+		DbWriter dbWriter = new DbWriter();
+
+		DbHelper.configureDb(sut);
+		DbHelper.configureDb(dbWriter);
+		dbWriter.write("drop table if exists PlayEntity;");
 		dbWriter.writeFromFile("DbReaderTest.sql");
 	}
 
-	private void setDbConfig(DbAccessor dbAccessor) {
-		dbAccessor.url(dbConfig.get("url"))
-				.user(dbConfig.get("user"))
-				.password(dbConfig.get("password"));
-	}
+	@Test
+	public void testBuilderProperties() {
+		Map<String, String> namedQueries = new HashMap<>();
+		sut.url("url1")
+				.user("u1")
+				.password("p1")
+				.namedQueries(namedQueries);
 
-	private void insert(PlayEntity entity) {
-		long id = dbWriter.param("name", entity.name)
-				.param("date", entity.date)
-				.writeAndGetId(entity.toInsertSql());
-
+		assertEquals("url1", sut.url);
+		assertEquals("u1", sut.user);
+		assertEquals("p1", sut.password);
+		assertEquals(namedQueries, sut.namedQueries);
 	}
 
 	@Test
-	public void testRead() {
-		PlayEntity entity = PlayEntity.create(1);
-		insert(entity);
-		List<PlayEntity> list = sut.read("select * from PlayEntity");
+	public void testParams() {
+		Map<String, Object> map = new HashMap<>();
+		map.put("k1", "v1");
+		map.put("k2", 3);
+		sut.params(map);
 
-		assertEquals(1, list.size());
-		assertEquals(entity, list.get(0));
+		assertEquals(map, sut.parameters);
+	}
+
+	@Test
+	public void testWriteThenRead() {
+		List<PlayEntity> inserted = DbHelper.insertPlayEntities(3);
+		List<PlayEntity> found = sut.read("select * from PlayEntity");
+
+		assertEquals(inserted, found);
 	}
 
 	@Test
 	public void testReadNamedQuery() {
+		List<PlayEntity> inserted = DbHelper.insertPlayEntities(3);
+		Map<String, String> map = ImmutableMap.of("k1", "select * from PlayEntity");
+		sut.namedQueries(map);
 
+		List<PlayEntity> found = sut.readNamedQuery("k1");
+		assertEquals(inserted, found);
 	}
+
 }

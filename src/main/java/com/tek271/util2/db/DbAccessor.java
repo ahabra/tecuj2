@@ -8,11 +8,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class DbAccessor<T extends DbAccessor> {
-	protected String url;
-	protected String user;
-	protected String password;
-	protected Map<String, Object> parameters = new HashMap<>();
-	protected Map<String, String> namedQueries;
+	String url;
+	String user;
+	String password;
+	final Map<String, Object> parameters = new HashMap<>();
+	Map<String, String> namedQueries;
 	private T thisObj;
 
 	protected abstract T getThis();
