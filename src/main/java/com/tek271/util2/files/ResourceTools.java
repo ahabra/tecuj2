@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Properties;
 
 public class ResourceTools {
 	public InputStream readAsInputStream(String fileName) {
@@ -24,6 +25,16 @@ public class ResourceTools {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public Properties readAsProperties(String fileName) {
+		Properties properties = new Properties();
+		try (InputStream is = readAsInputStream(fileName)) {
+			properties.load(is);
+		} catch (IOException e) {
+			throw new RuntimeException("Could not load " + fileName + " contents into properties.", e);
+		}
+		return properties;
 	}
 
 }
