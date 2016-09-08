@@ -1,7 +1,7 @@
 package com.tek271.util2.db;
 
-import com.tek271.util2.files.ResourceTools;
-import com.tek271.util2.files.YamlTools;
+import com.tek271.util2.file.ResourceTools;
+import com.tek271.util2.file.YamlTools;
 import org.sql2o.Connection;
 import org.sql2o.Query;
 import org.sql2o.Sql2o;

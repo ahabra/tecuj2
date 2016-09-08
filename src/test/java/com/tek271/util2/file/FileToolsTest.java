@@ -1,4 +1,4 @@
-package com.tek271.util2.files;
+package com.tek271.util2.file;
 
 import org.junit.Before;
 import org.junit.Ignore;

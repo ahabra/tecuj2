@@ -1,4 +1,4 @@
-package com.tek271.util2.files;
+package com.tek271.util2.file;
 
 import com.google.common.annotations.VisibleForTesting;
 import org.yaml.snakeyaml.Yaml;
