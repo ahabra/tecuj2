@@ -9,8 +9,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 public class ResourceTools {
-	public InputStream readAsInputStream(String fileName) {
-		URL url = Resources.getResource(fileName);
+	public InputStream readAsInputStream(String resourceName) {
+		URL url = Resources.getResource(resourceName);
 		try {
 			return Resources.asByteSource(url).openStream();
 		} catch (IOException e) {
@@ -18,8 +18,8 @@ public class ResourceTools {
 		}
 	}
 
-	public String readAsString(String fileName) {
-		URL url = Resources.getResource(fileName);
+	public String readAsString(String resourceName) {
+		URL url = Resources.getResource(resourceName);
 		try {
 			return Resources.toString(url, StandardCharsets.UTF_8);
 		} catch (IOException e) {
@@ -27,12 +27,12 @@ public class ResourceTools {
 		}
 	}
 
-	public Properties readAsProperties(String fileName) {
+	public Properties readAsProperties(String resourceName) {
 		Properties properties = new Properties();
-		try (InputStream is = readAsInputStream(fileName)) {
+		try (InputStream is = readAsInputStream(resourceName)) {
 			properties.load(is);
 		} catch (IOException e) {
-			throw new RuntimeException("Could not load " + fileName + " contents into properties.", e);
+			throw new RuntimeException("Could not load resource " + resourceName + " contents into properties.", e);
 		}
 		return properties;
 	}
