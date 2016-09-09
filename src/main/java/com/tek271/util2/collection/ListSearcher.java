@@ -1,9 +1,9 @@
 package com.tek271.util2.collection;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.Objects;
+import java.util.function.BiPredicate;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.Math.max;
@@ -15,13 +15,13 @@ public class ListSearcher<T> {
 	private final int sourceSize;
 	private int startIndex;
 	private int maxIndex;
-	private Predicate<T> matcher;
+	private BiPredicate<T,T> matcher= Objects::equals;
+	private CollectionTools collectionTools = new CollectionTools();
 
 	public ListSearcher(List<T> source) {
 		this.source = source;
 		this.sourceSize = source.size();
 		this.maxIndex = sourceSize;
-		this.matcher = Predicate.isEqual(null);
 	}
 
 	public ListSearcher<T> startIndex(int startIndex) {
@@ -44,7 +44,7 @@ public class ListSearcher<T> {
 		return min(max(i, 0), sourceSize);
 	}
 
-	public ListSearcher<T> matcher(Predicate<T> matcher) {
+	public ListSearcher<T> matcher(BiPredicate<T,T> matcher) {
 		this.matcher = matcher;
 		return this;
 	}
@@ -54,9 +54,23 @@ public class ListSearcher<T> {
 		return source.subList(startIndex, maxIndex);
 	}
 
+	public int indexOf(T target) {
+		for (int i=startIndex; i<maxIndex; i++) {
+			if (matcher.test(source.get(i), target)) return i;
+		}
+		return -1;
+	}
+
+	public int lastIndexOf(T target) {
+		for (int i=maxIndex-1; i>=startIndex; i--) {
+			if (matcher.test(source.get(i), target)) return i;
+		}
+		return -1;
+	}
+
 	public int indexOfAny(Collection<T> targets) {
 		for (int i=startIndex; i<maxIndex; i++) {
-			if (targets.contains( source.get(i) )) return i;
+			if (collectionTools.contains(targets, source.get(i), matcher)) return i;
 		}
 		return -1;
 	}
@@ -70,13 +84,29 @@ public class ListSearcher<T> {
 		int targetSize = target.size();
 		if (targetSize == 0 || targetSize>sourceSize) return -1;
 
-		List<T> sub = subList();
-		int i = Collections.indexOfSubList(sub, target);
-		return i<0 ? i : i+startIndex;
+		int originalStartIndex = startIndex;
+		try {
+			for (int i=startIndex; i<sourceSize-targetSize+1; i++) {
+				if (isPrefix(target)) {
+					return i;
+				}
+				startIndex++;
+			}
+		} finally {
+			startIndex = originalStartIndex;
+		}
+		return -1;
 	}
 
 	public boolean isPrefix(List<T> target) {
-		return indexOfSubList(target) == startIndex;
+		if (collectionTools.isEmpty(target)) return false;
+
+		List<T> sub = subList();
+		if (target.size() > sub.size()) return false;
+		for (int i=0, n=target.size(); i<n; i++) {
+			if (!matcher.test(sub.get(i), target.get(i))) return false;
+		}
+		return true;
 	}
 
 }

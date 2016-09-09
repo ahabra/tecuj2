@@ -44,18 +44,6 @@ public class ListToolsTest {
 	}
 
 	@Test
-	public void testIndexOf() {
-		assertEquals(-1, sut.indexOf(LIST, e -> e==8));
-		assertEquals(2, sut.indexOf(LIST, e -> e==3));
-	}
-
-	@Test
-	public void testLastIndexOf() {
-		assertEquals(-1, sut.lastIndexOf(LIST, e -> e==8));
-		assertEquals(2, sut.lastIndexOf(LIST, e -> e==3));
-	}
-
-	@Test
 	public void testSetLast() {
 		List<Integer> list = newArrayList(LIST);
 		assertEquals(5, (int)sut.getLast(list) );

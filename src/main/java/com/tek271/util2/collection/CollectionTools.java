@@ -4,6 +4,7 @@ import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.Collection;
 import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 public class CollectionTools {
 
@@ -23,6 +24,17 @@ public class CollectionTools {
 			if (matcher.test(c, target)) return true;
 		}
 		return false;
+	}
+
+	public <T> boolean contains(Collection<T> col, Predicate<T> matcher) {
+		for (T c: col) {
+			if (matcher.test(c)) return true;
+		}
+		return false;
+	}
+
+	public <T> boolean isEmpty(Collection<T> c) {
+		return c==null || c.isEmpty();
 	}
 
 }

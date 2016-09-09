@@ -33,15 +33,32 @@ public class ListSearcherTest {
 	}
 
 	@Test
+	public void testIndexOf() {
+		assertEquals(1, sut.indexOf(1));
+		assertEquals(-1, sut.indexOf(9));
+		assertEquals(4, sut.matcher((a,b) -> b==a*2).indexOf(8));
+	}
+
+	@Test
+	public void testLastIndexOf() {
+		assertEquals(1, sut.lastIndexOf(1));
+		assertEquals(-1, sut.lastIndexOf(9));
+		assertEquals(4, sut.matcher((a,b) -> b==a*2).lastIndexOf(8));
+	}
+
+	@Test
 	public void testIndexOfAny() {
 		assertEquals(1, sut.indexOfAny(7, 3, 1));
 		assertEquals(-1, sut.startIndex(2).maxIndex(3).indexOfAny(7, 3, 1));
 		assertEquals(3, sut.startIndex(2).maxIndex(4).indexOfAny(7, 3, 1));
+		assertEquals(2, sut.matcher((a,b)-> a+b==9).indexOfAny(7, 3, 1));
 	}
 
 	@Test
 	public void testIndexOfSubList() {
 		assertEquals(2, sut.indexOfSubList(newArrayList(2, 3)));
+		assertEquals(3, sut.indexOfSubList(newArrayList(3, 4)));
+		assertEquals(3, sut.matcher(Integer::equals).indexOfSubList(newArrayList(3, 4)));
 		assertEquals(-1, sut.startIndex(2).indexOfSubList(newArrayList(1)));
 		assertEquals(2, sut.startIndex(1).maxIndex(3).indexOfSubList(newArrayList(2)));
 		assertEquals(-1, sut.startIndex(1).maxIndex(3).indexOfSubList(newArrayList(2, 3)));

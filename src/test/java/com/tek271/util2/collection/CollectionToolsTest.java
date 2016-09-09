@@ -34,12 +34,21 @@ public class CollectionToolsTest {
 	}
 
 	@Test
-	public void testContains() {
+	public void testContainsWithBiPredicate() {
 		assertTrue(sut.contains(LIST, 1, Integer::equals));
 		assertFalse(sut.contains(LIST, 9, Integer::equals));
 
 		List<String> list = newArrayList("ab", "cd");
 		assertTrue(sut.contains(list, "c", String::startsWith));
+	}
+
+	@Test
+	public void testContainsWithPredicate() {
+		assertTrue(sut.contains(LIST, a-> a==1));
+		assertFalse(sut.contains(LIST, a-> a==9));
+
+		List<String> list = newArrayList("ab", "cd");
+		assertTrue(sut.contains(list, a-> a.startsWith("c")));
 	}
 
 }
