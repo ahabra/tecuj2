@@ -15,7 +15,7 @@ public class ListSearcher<T> {
 	private final int sourceSize;
 	private int startIndex;
 	private int maxIndex;
-	private BiPredicate<T,T> matcher= Objects::equals;
+	private BiPredicate<T,T> matcher;
 	private CollectionTools collectionTools = new CollectionTools();
 
 	public ListSearcher(List<T> source) {
@@ -34,9 +34,10 @@ public class ListSearcher<T> {
 		return this;
 	}
 
-	public ListSearcher<T> resetIndex() {
+	public ListSearcher<T> reset() {
 		startIndex = 0;
 		maxIndex = sourceSize;
+		matcher = null;
 		return this;
 	}
 
@@ -49,6 +50,10 @@ public class ListSearcher<T> {
 		return this;
 	}
 
+	public ListSearcher<T> equalsMatcher() {
+		return matcher(Objects::equals);
+	}
+
 	public List<T> subList() {
 		if (maxIndex < startIndex) return emptyList();
 		return source.subList(startIndex, maxIndex);
@@ -56,21 +61,21 @@ public class ListSearcher<T> {
 
 	public int indexOf(T target) {
 		for (int i=startIndex; i<maxIndex; i++) {
-			if (matcher.test(source.get(i), target)) return i;
+			if (eq(source.get(i), target)) return i;
 		}
 		return -1;
 	}
 
 	public int lastIndexOf(T target) {
 		for (int i=maxIndex-1; i>=startIndex; i--) {
-			if (matcher.test(source.get(i), target)) return i;
+			if (eq(source.get(i), target)) return i;
 		}
 		return -1;
 	}
 
 	public int indexOfAny(Collection<T> targets) {
 		for (int i=startIndex; i<maxIndex; i++) {
-			if (collectionTools.contains(targets, source.get(i), matcher)) return i;
+			if (contains(targets, source.get(i))) return i;
 		}
 		return -1;
 	}
@@ -104,9 +109,21 @@ public class ListSearcher<T> {
 		List<T> sub = subList();
 		if (target.size() > sub.size()) return false;
 		for (int i=0, n=target.size(); i<n; i++) {
-			if (!matcher.test(sub.get(i), target.get(i))) return false;
+			if (!eq(sub.get(i), target.get(i))) return false;
 		}
 		return true;
+	}
+
+	private boolean eq(T a, T b) {
+		if (matcher==null) {
+			return Objects.equals(a, b);
+		}
+
+		return matcher.test(a, b);
+	}
+
+	private boolean contains(Collection<T> col, T target) {
+		return collectionTools.contains(col, target, matcher);
 	}
 
 }

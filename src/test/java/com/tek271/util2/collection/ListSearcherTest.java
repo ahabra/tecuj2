@@ -69,9 +69,16 @@ public class ListSearcherTest {
 		assertTrue(sut.isPrefix(newArrayList(0, 1)));
 		assertTrue(sut.startIndex(1).maxIndex(3).isPrefix(newArrayList(1, 2)));
 		assertFalse(sut.startIndex(1).maxIndex(2).isPrefix(newArrayList(1, 2)));
-		assertTrue(sut.startIndex(1).maxIndex(2).resetIndex().isPrefix(newArrayList(0, 1)));
+		assertTrue(sut.startIndex(1).maxIndex(2).reset().isPrefix(newArrayList(0, 1)));
 		assertFalse(sut.isPrefix(newArrayList()));
 	}
 
+	@Test
+	public void testMatcher() {
+		assertEquals(1, sut.indexOf(1));
+		assertEquals(3, sut.matcher((a,b)->a+b==7).indexOf(4));
+		assertEquals(-1, sut.indexOf(1));
+		assertEquals(1, sut.equalsMatcher().indexOf(1));
+	}
 
 }
