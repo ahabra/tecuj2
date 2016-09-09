@@ -40,6 +40,15 @@ public class ListSearcherTest {
 	}
 
 	@Test
+	public void testIndexOfStringPrefix() {
+		List<String> list = newArrayList("ab", "cd", "ef");
+		ListSearcher<String> searcher = new ListSearcher<>(list);
+		assertEquals(1, searcher.indexOf("cd"));
+		assertEquals(-1, searcher.indexOf("c"));
+		assertEquals(1, searcher.matcher(String::startsWith).indexOf("c"));
+	}
+
+	@Test
 	public void testLastIndexOf() {
 		assertEquals(1, sut.lastIndexOf(1));
 		assertEquals(-1, sut.lastIndexOf(9));
