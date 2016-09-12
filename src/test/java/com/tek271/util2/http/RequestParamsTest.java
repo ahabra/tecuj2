@@ -4,6 +4,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.tek271.util2.http.RequestParams.MASK;
 import static org.junit.Assert.assertEquals;
 
 public class RequestParamsTest {
@@ -51,7 +52,7 @@ public class RequestParamsTest {
 	public void testLoggingExcludedParams() {
 		sut.parse("a=1&p=secret");
 		sut.loggingExcludedParams("p");
-		assertEquals("a=1&p=*****", sut.toString());
+		assertEquals("a=1&p=" + MASK, sut.toString());
 	}
 
 	@Test
