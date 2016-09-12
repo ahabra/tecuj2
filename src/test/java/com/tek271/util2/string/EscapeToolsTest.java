@@ -1,10 +1,9 @@
 package com.tek271.util2.string;
 
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
-import java.nio.charset.StandardCharsets;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class EscapeToolsTest {
 	private EscapeTools sut;

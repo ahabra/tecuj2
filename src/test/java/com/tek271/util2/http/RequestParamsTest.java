@@ -60,4 +60,10 @@ public class RequestParamsTest {
 		assertEquals("a=1&b=2", sut.getText());
 	}
 
+	@Test
+	public void testGetTextWithEscapedValues() {
+		sut.add("a", "1 2");
+		assertEquals("a=1+2", sut.getText());
+	}
+
 }

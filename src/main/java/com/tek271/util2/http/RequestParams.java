@@ -2,6 +2,7 @@ package com.tek271.util2.http;
 
 import com.google.common.base.Splitter;
 import com.tek271.util2.collection.ListOfPairs;
+import com.tek271.util2.string.EscapeTools;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -18,6 +19,7 @@ public class RequestParams extends ListOfPairs<String, String> {
 	static final String EQ = "=";
 	static final String AMP = "&";
 
+	EscapeTools escapeTools = new EscapeTools();
 	private Set<String> excludedParams = new HashSet<>();
 
 	public RequestParams parse(String text) {
@@ -55,8 +57,16 @@ public class RequestParams extends ListOfPairs<String, String> {
 		return k + EQ + v;
 	}
 
-	public String getText() {
-		return stream().map(t-> t.getKey()+ EQ + t.getValue()).collect(joining(AMP));
+	private String termToStringEncoded(Pair<String, String> term) {
+		String k = term.getKey();
+		String v = escapeTools.escapeUrl(term.getValue());
+		return k + EQ + v;
 	}
+
+	public String getText() {
+		return stream().map(this::termToStringEncoded).collect(joining(AMP));
+	}
+
+
 
 }
