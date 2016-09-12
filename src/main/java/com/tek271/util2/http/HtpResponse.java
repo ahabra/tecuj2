@@ -1,5 +1,6 @@
 package com.tek271.util2.http;
 
+import com.tek271.util2.collection.ListOfPairs;
 import com.tek271.util2.string.ToString;
 import org.eclipse.jetty.client.api.ContentResponse;
 
@@ -11,6 +12,8 @@ public class HtpResponse {
 	public final int status;
 	public final String reason;
 	public final boolean isSuccess;
+	public final ListOfPairs<String, String> headers = new ListOfPairs<>();
+
 
 	public HtpResponse(String text, String type, int status, String reason) {
 		this.text = text;
@@ -22,6 +25,7 @@ public class HtpResponse {
 
 	public HtpResponse(ContentResponse res) {
 		this(res.getContentAsString(), res.getMediaType(), res.getStatus(), res.getReason());
+		res.getHeaders().forEach(f-> headers.add(f.getName(), f.getValue()));
 	}
 
 	public static HtpResponse ok(String text) {
@@ -30,6 +34,6 @@ public class HtpResponse {
 
 	@Override
 	public String toString() {
-		return new ToString().style(SHORT_PREFIX_STYLE).toString(this);
+		return new ToString().style(SHORT_PREFIX_STYLE).exclude("headers").toString(this);
 	}
 }
