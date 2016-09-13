@@ -22,6 +22,8 @@ public class Time {
 	public final int nano;
 	public final LocalDateTime localDateTime;
 
+	private static final String[] EXCLUDED_FIELDS = {"localDateTime"};
+
 
 	public Time(LocalDateTime d) {
 		localDateTime = d;
@@ -81,31 +83,47 @@ public class Time {
 		return toDate(ZoneId.systemDefault());
 	}
 
-	@Override
-	public String toString() {
-		return new ToString().exclude("localDateTime").toString(this);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return (obj instanceof Time) && isEquals((Time) obj, "localDateTime");
-	}
-
-	@Override
-	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode(this, "localDateTime");
-	}
-
-	public boolean isEquals(Time another, String... excludedFields) {
-		return EqualsBuilder.reflectionEquals(this, another, excludedFields);
-	}
-
 	public long toEpochMilli(ZoneId zoneId) {
 		return ZonedDateTime.of(localDateTime, zoneId).toInstant().toEpochMilli();
 	}
 
 	public long toEpochMilli() {
 		return toEpochMilli(ZoneId.systemDefault());
+	}
+
+	public LocalDate toLocalDate() {
+		return LocalDate.of(year, month, day);
+	}
+
+	public LocalTime toLocalTime() {
+		return LocalTime.of(hour, minute, second, nano);
+	}
+
+	@Override
+	public String toString() {
+		return new ToString().exclude(EXCLUDED_FIELDS).toString(this);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return (obj instanceof Time) && isEqual((Time) obj, EXCLUDED_FIELDS);
+	}
+
+	@Override
+	public int hashCode() {
+		return HashCodeBuilder.reflectionHashCode(this, EXCLUDED_FIELDS);
+	}
+
+	public boolean isEqual(Time another, String... excludedFields) {
+		return EqualsBuilder.reflectionEquals(this, another, excludedFields);
+	}
+
+	public boolean isAfter(Time time) {
+		return localDateTime.isAfter(time.localDateTime);
+	}
+
+	public boolean isBefore(Time time) {
+		return localDateTime.isBefore(time.localDateTime);
 	}
 
 	public boolean isSameDay(Time time) {

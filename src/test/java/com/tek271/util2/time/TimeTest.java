@@ -3,6 +3,7 @@ package com.tek271.util2.time;
 import org.junit.*;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
 
@@ -38,7 +39,7 @@ public class TimeTest {
 	public void testToDate() {
 		Date date = sut.toDate();
 		Time time = new Time(date);
-		assertEquals(true, sut.isEquals(time, "localDateTime", "nano"));
+		assertEquals(true, sut.isEqual(time, "localDateTime", "nano"));
 	}
 
 	@Test
@@ -111,5 +112,30 @@ public class TimeTest {
 	public void testToday() {
 		assertTrue( Time.today().isToday() );
 	}
+
+	@Test
+	public void testToLocalDate() {
+		LocalDate localDate = sut.toLocalDate();
+		assertEquals(sut.year, localDate.getYear());
+		assertEquals(sut.month, localDate.getMonthValue());
+		assertEquals(sut.day, localDate.getDayOfMonth());
+	}
+
+	@Test
+	public void testToLocalTime() {
+		LocalTime localTime = sut.toLocalTime();
+		assertEquals(sut.hour, localTime.getHour());
+		assertEquals(sut.minute, localTime.getMinute());
+		assertEquals(sut.second, localTime.getSecond());
+		assertEquals(sut.nano, localTime.getNano());
+	}
+
+	@Test
+	public void testIsAfter() {
+		Time time = new Time(2016, 2, 29, 13, 59, 58, 100000);
+		assertTrue(time.isAfter(sut));
+		assertTrue(sut.isBefore(time));
+	}
+
 
 }
