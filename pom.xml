@@ -146,5 +146,12 @@
 			<version>9.3.11.v20160721</version>
 		</dependency>
 
+		<dependency>
+			<!-- reflection library -->
+			<groupId>org.jooq</groupId>
+			<artifactId>joor</artifactId>
+			<version>0.9.6</version>
+		</dependency>
+
 	</dependencies>
 </project>
