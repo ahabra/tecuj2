@@ -4,8 +4,6 @@ import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.google.common.collect.Sets.newHashSet;
-
 public class FieldReflector<T> {
 	private final T obj;
 	private final Set<String> excludedFieldNames = new HashSet<>();
