@@ -10,47 +10,20 @@ import static com.google.common.collect.Sets.newHashSet;
 
 public class Reflector<T> {
 	private final T obj;
+	private final FieldReflector<T> fieldReflector;
 	private final Set<ScopeEnum> excludedScopes = new HashSet<>();
-	private final Set<String> excludedFieldNames = new HashSet<>();
-
 
 	public Reflector(T obj) {
 		this.obj = obj;
+		fieldReflector = new FieldReflector<>(obj);
 	}
 
 	public <V> V getFieldValue(Field field) {
-		boolean accessChanged = false;
-		if (! field.isAccessible()) {
-			field.setAccessible(true);
-			accessChanged = true;
-		}
-		try {
-			//noinspection unchecked
-			return (V) field.get(obj);
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException(fieldAccessError(field.getName()), e);
-		} finally {
-			if (accessChanged) {
-				field.setAccessible(false);
-			}
-		}
-	}
-
-	private String fieldAccessError(String fieldName) {
-		return "Cannot access field " + fieldName +	" in " + obj.getClass().getName();
+		return fieldReflector.getFieldValue(field);
 	}
 
 	public <V> V getFieldValue(String fieldName) {
-		Field field = findField(fieldName);
-		return getFieldValue(field);
-	}
-
-	private Field findField(String fieldName) {
-		try {
-			return obj.getClass().getDeclaredField(fieldName);
-		} catch (NoSuchFieldException e) {
-			throw new RuntimeException(fieldAccessError(fieldName), e);
-		}
+		return fieldReflector.getFieldValue(fieldName);
 	}
 
 	public Reflector<T> excludeScope(Set<ScopeEnum> scopes) {
@@ -63,7 +36,7 @@ public class Reflector<T> {
 	}
 
 	public Reflector<T> excludeField(Set<String> fieldNames) {
-		excludedFieldNames.addAll(fieldNames);
+		fieldReflector.excludeField(fieldNames);
 		return this;
 	}
 
@@ -73,7 +46,7 @@ public class Reflector<T> {
 
 	private boolean isExcluded(Field field) {
 		String fieldName = field.getName();
-		if (excludedFieldNames.contains(fieldName)) return true;
+		if (fieldReflector.isExcluded(fieldName)) return true;
 
 		ScopeEnum scope = ScopeEnum.find(field.getModifiers());
 		return excludedScopes.contains(scope);
