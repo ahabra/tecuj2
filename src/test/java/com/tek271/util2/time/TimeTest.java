@@ -105,7 +105,7 @@ public class TimeTest {
 	@Test
 	public void testFormat() {
 		assertEquals("2016.01.29", sut.format("yyyy.MM.dd"));
-		assertEquals("2016.01.29-13.59.58.100000", sut.format("yyyy.MM.dd-HH.mm.ss.n"));
+		assertEquals("2016.01.29-13.59.58.000100000", sut.format("yyyy.MM.dd-HH.mm.ss.nnnnnnnnn"));
 	}
 
 	@Test
