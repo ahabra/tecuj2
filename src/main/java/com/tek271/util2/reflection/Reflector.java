@@ -35,13 +35,9 @@ public class Reflector<T> {
 		return excludeScope(newHashSet(scopes));
 	}
 
-	public Reflector<T> excludeField(Set<String> fieldNames) {
-		fieldReflector.excludeField(fieldNames);
-		return this;
-	}
-
 	public Reflector<T> excludeField(String... fieldNames) {
-		return excludeField(newHashSet(fieldNames));
+		fieldReflector.excludeField(newHashSet(fieldNames));
+		return this;
 	}
 
 	private boolean isExcluded(Field field) {
