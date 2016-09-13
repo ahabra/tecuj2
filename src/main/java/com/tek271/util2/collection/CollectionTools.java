@@ -3,7 +3,6 @@ package com.tek271.util2.collection;
 import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
