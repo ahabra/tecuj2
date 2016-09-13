@@ -56,4 +56,12 @@ public class FieldReflector<T> {
 		return excludedFieldNames.contains(fieldName);
 	}
 
+	public boolean isExcluded(Field field) {
+		return isExcluded(field.getName());
+	}
+
+	public ScopeEnum scope(Field field) {
+		return ScopeEnum.find(field.getModifiers());
+	}
+
 }

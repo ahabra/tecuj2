@@ -45,10 +45,9 @@ public class Reflector<T> {
 	}
 
 	private boolean isExcluded(Field field) {
-		String fieldName = field.getName();
-		if (fieldReflector.isExcluded(fieldName)) return true;
+		if (fieldReflector.isExcluded(field)) return true;
 
-		ScopeEnum scope = ScopeEnum.find(field.getModifiers());
+		ScopeEnum scope = fieldReflector.scope(field);
 		return excludedScopes.contains(scope);
 	}
 
