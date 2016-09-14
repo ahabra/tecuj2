@@ -11,6 +11,7 @@ public class MethodReflectorTest {
 	public static class MyClass {
 		int m1() { return 1;}
 		void m2() {}
+		int m3(int a, int b) { return a+b;}
 	}
 
 	@Before
@@ -21,11 +22,17 @@ public class MethodReflectorTest {
 
 	@Test
 	public void testCallFunction() {
-		assertEquals(1, sut.callFunction("m1"));
+		assertEquals(myClass.m1(), sut.callFunction("m1"));
 	}
 
 	@Test
 	public void testCallVoid() {
 		sut.callVoid("m2");
 	}
+
+	@Test
+	public void callFunctionWithArgs() {
+		assertEquals(myClass.m3(4,5), sut.callFunction("m3", 4, 5));
+	}
+
 }

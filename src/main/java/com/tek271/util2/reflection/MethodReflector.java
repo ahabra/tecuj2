@@ -5,11 +5,9 @@ import org.joor.Reflect;
 import static org.joor.Reflect.*;
 
 public class MethodReflector<OBJ> {
-	private final OBJ obj;
 	private final Reflect reflect;
 
 	public MethodReflector(OBJ obj) {
-		this.obj = obj;
 		reflect = on(obj);
 	}
 
