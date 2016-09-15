@@ -1,12 +1,18 @@
 package com.tek271.util2.reflection;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static com.google.common.collect.Sets.newHashSet;
 
 public class FieldReflector<T> {
 	private final T obj;
 	private final Set<String> excludedFieldNames = new HashSet<>();
+	private final Set<ScopeEnum> excludedScopes = new HashSet<>();
+
 
 	public FieldReflector(T obj) {
 		this.obj = obj;
@@ -47,21 +53,58 @@ public class FieldReflector<T> {
 		return "Cannot access field " + fieldName +	" in " + obj.getClass().getName();
 	}
 
+	public FieldReflector<T> excludeScope(Set<ScopeEnum> scopes) {
+		excludedScopes.addAll(scopes);
+		return this;
+	}
+
+	public FieldReflector<T> excludeScope(ScopeEnum... scopes) {
+		return excludeScope(newHashSet(scopes));
+	}
+
 	public FieldReflector<T> excludeField(Set<String> fieldNames) {
 		excludedFieldNames.addAll(fieldNames);
 		return this;
 	}
 
-	public boolean isExcluded(String fieldName) {
-		return excludedFieldNames.contains(fieldName);
+	public FieldReflector<T> excludeField(String... fieldNames) {
+		excludeField(newHashSet(fieldNames));
+		return this;
 	}
 
 	public boolean isExcluded(Field field) {
-		return isExcluded(field.getName());
+		if (excludedFieldNames.contains(field.getName())) return true;
+
+		ScopeEnum scope = scopeOf(field);
+		return excludedScopes.contains(scope);
 	}
 
-	public ScopeEnum scope(Field field) {
+	public ScopeEnum scopeOf(Field field) {
 		return ScopeEnum.find(field.getModifiers());
+	}
+
+	public Map<String, Object> toMap() {
+		Field[] fields = obj.getClass().getDeclaredFields();
+		Map<String, Object> map = new LinkedHashMap<>();
+		for (Field f: fields) {
+			if (! isExcluded(f)) {
+				map.put(f.getName(), getFieldValue(f));
+			}
+		}
+		return map;
+	}
+
+	public List<Pair<String, Object>> toPairs() {
+		Map<String, Object> map = toMap();
+		return map.entrySet().stream()
+				.map(e -> Pair.of(e.getKey(), e.getValue()))
+				.collect(Collectors.toList());
+	}
+
+	public Pair<String, Object>[] toPairsArray() {
+		List<Pair<String, Object>> list = toPairs();
+		//noinspection unchecked
+		return list.toArray( new Pair[list.size()] );
 	}
 
 }
