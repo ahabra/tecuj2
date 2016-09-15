@@ -36,6 +36,7 @@ public class PropertyReflector<T> {
 				reflector = new PropertyReflector<>(result);
 			}
 		}
+		//noinspection unchecked
 		return (R) result;
 	}
 
