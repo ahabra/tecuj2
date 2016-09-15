@@ -18,14 +18,14 @@ public class MethodReflector<T> {
 	private boolean excludeInheritedMethods;
 	private final Set<ScopeEnum> excludedScopes = new HashSet<>();
 
-	public MethodReflector(T obj, Reflect reflect) {
+	public MethodReflector(T obj) {
+		this(obj, on(obj));
+	}
+
+	private MethodReflector(T obj, Reflect reflect) {
 		this.obj = obj;
 		this.reflect = reflect;
 		this.objClass = obj.getClass();
-	}
-
-	public MethodReflector(T obj) {
-		this(obj, on(obj));
 	}
 
 	public <R> R callFunction(String methodName, Object... args) {
