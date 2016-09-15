@@ -1,6 +1,9 @@
 package com.tek271.util2.reflection;
 
+import com.google.common.base.Splitter;
+
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -21,6 +24,22 @@ public class PropertyReflector<T> {
 	}
 
 	public <R> R get(String propertyName) {
+		if (!propertyName.contains(".")) return getSimpleProperty(propertyName);
+
+		List<String> parts = Splitter.on('.').splitToList(propertyName);
+		PropertyReflector<?> reflector = this;
+		Object result = null;
+		for (int i=0, n=parts.size(); i<n; i++) {
+			result = reflector.getSimpleProperty(parts.get(i));
+			if (result == null) break;
+			if (i<n-1) {
+				reflector = new PropertyReflector<>(result);
+			}
+		}
+		return (R) result;
+	}
+
+	<R> R getSimpleProperty(String propertyName) {
 		if (fieldReflector.getFields().contains(propertyName)) {
 			return fieldReflector.getFieldValue(propertyName);
 		}

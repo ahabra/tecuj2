@@ -9,27 +9,44 @@ public class PropertyReflectorTest {
 		int a= 1;
 		String getName() {return "joe"; }
 		String food() { return "egg"; }
+		ClassB b= new ClassB();
+	}
+
+	public static class ClassB {
+		String a = "hi";
+		String b() { return "hi2"; }
+		String getC() { return "hi3"; }
 	}
 
 	private PropertyReflector<ClassA> sut;
-	private ClassA obj;
+	private ClassA objA;
 
 	@Before
 	public void setUp() {
-		obj = new ClassA();
-		sut = new PropertyReflector<>(obj);
+		objA = new ClassA();
+		sut = new PropertyReflector<>(objA);
 	}
 
 	@Test
 	public void testGetField() {
-		assertEquals(obj.a, intValue(sut.get("a")));
+		assertEquals(objA.a, intValue(sut.get("a")));
 	}
 
 	@Test
 	public void testGetGetter() {
-		assertEquals(obj.getName(), sut.get("name"));
-		assertEquals(obj.food(), sut.get("food"));
+		assertEquals(objA.getName(), sut.get("name"));
+		assertEquals(objA.food(), sut.get("food"));
 		assertNull(sut.get("notThere"));
+	}
+
+	@Test
+	public void testGetPropoertyChain() {
+		assertEquals(objA.b.a, sut.get("b.a"));
+		assertEquals(objA.b.b(), sut.get("b.b"));
+		assertEquals(objA.b.getC(), sut.get("b.c"));
+		assertEquals(objA.b.getC(), sut.get("b.getC"));
+		assertNull(sut.get("b.z"));
+		assertNull(sut.get("z.a"));
 	}
 
 	private int intValue(Integer i) {
