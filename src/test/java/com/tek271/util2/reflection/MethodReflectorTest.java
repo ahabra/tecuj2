@@ -44,7 +44,6 @@ public class MethodReflectorTest {
 	@Test
 	public void testGetMethods() {
 		Set<Method> methods = sut.excludeObjectMethods().getMethods();
-		System.out.println(methods);
 		assertEquals(4, methods.size());
 	}
 

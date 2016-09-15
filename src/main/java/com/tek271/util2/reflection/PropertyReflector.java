@@ -23,6 +23,7 @@ public class PropertyReflector<T> {
 		this(new FieldReflector<>(obj), new MethodReflector<>(obj));
 	}
 
+	@SuppressWarnings("unchecked")
 	public <R> R get(String propertyName) {
 		if (!propertyName.contains(".")) return getSimpleProperty(propertyName);
 
@@ -36,7 +37,6 @@ public class PropertyReflector<T> {
 				reflector = new PropertyReflector<>(result);
 			}
 		}
-		//noinspection unchecked
 		return (R) result;
 	}
 

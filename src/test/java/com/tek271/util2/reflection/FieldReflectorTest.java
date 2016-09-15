@@ -49,7 +49,6 @@ public class FieldReflectorTest {
 		assertEquals(2, map.size());
 		assertEquals(obj.b, map.get("b"));
 		assertEquals(obj.c, map.get("c"));
-		System.out.println(map);
 	}
 
 	@Test

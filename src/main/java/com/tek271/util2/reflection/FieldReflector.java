@@ -18,6 +18,7 @@ public class FieldReflector<T> {
 		this.obj = obj;
 	}
 
+	@SuppressWarnings("unchecked")
 	public <V> V getFieldValue(Field field) {
 		boolean accessChanged = false;
 		if (! field.isAccessible()) {
@@ -25,7 +26,6 @@ public class FieldReflector<T> {
 			accessChanged = true;
 		}
 		try {
-			//noinspection unchecked
 			return (V) field.get(obj);
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException(fieldAccessError(field.getName()), e);
@@ -97,9 +97,9 @@ public class FieldReflector<T> {
 				.collect(Collectors.toList());
 	}
 
+	@SuppressWarnings("unchecked")
 	public Pair<String, Object>[] toPairsArray() {
 		List<Pair<String, Object>> list = toPairs();
-		//noinspection unchecked
 		return list.toArray( new Pair[list.size()] );
 	}
 

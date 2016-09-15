@@ -21,8 +21,8 @@ public class ListOfPairs<K,V> extends ArrayList<Pair<K, V>> {
 		return this;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Pair<K, V>[] toArray() {
-		//noinspection unchecked
 		Pair<K, V>[] ar = new Pair[size()];
 		return toArray(ar);
 	}
