@@ -10,37 +10,37 @@ import static org.junit.Assert.*;
 
 public class ToStringTest {
 	@SuppressWarnings("unused")
-	private static class MyClass {
+	private static class ClassA {
 		int a=1;
 		int b=2;
 		boolean c=true;
 	}
 
 	private ToString sut;
-	private MyClass obj;
+	private ClassA obj;
 
 	@Before
 	public void setUp() {
 		sut = new ToString();
-		obj = new MyClass();
+		obj = new ClassA();
 	}
 
 	@Test
 	public void testToStringWithExclusion() {
 		String s = sut.exclude("a").toString(obj);
-		assertEquals("ToStringTest.MyClass[b=2,c=true]", s);
+		assertEquals("ToStringTest.ClassA[b=2,c=true]", s);
 	}
 
 	@Test
 	public void testToStringWithInclusion() {
 		String s = sut.include("a").toString(obj);
-		assertEquals("ToStringTest.MyClass[a=1]", s);
+		assertEquals("ToStringTest.ClassA[a=1]", s);
 	}
 
 	@Test
 	public void testToStringWithInclusionAndExclusion() {
 		String s = sut.include("a", "b").exclude("b").toString(obj);
-		assertEquals("ToStringTest.MyClass[a=1]", s);
+		assertEquals("ToStringTest.ClassA[a=1]", s);
 	}
 
 	@Test
@@ -51,7 +51,7 @@ public class ToStringTest {
 
 	@Test
 	public void testToStringWithCollection() {
-		List<MyClass> list = Lists.newArrayList(obj, obj);
+		List<ClassA> list = Lists.newArrayList(obj, obj);
 		String s = sut
 				.style(ToStringStyle.NO_CLASS_NAME_STYLE)
 				.exclude("c", "b")
@@ -64,7 +64,7 @@ public class ToStringTest {
 
 	@Test
 	public void testToStringWithArray() {
-		MyClass[] ar = {obj, obj};
+		ClassA[] ar = {obj, obj};
 		String s = sut
 				.style(ToStringStyle.NO_CLASS_NAME_STYLE)
 				.include("a")

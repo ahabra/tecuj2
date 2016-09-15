@@ -9,10 +9,10 @@ import java.util.Set;
 import static org.junit.Assert.assertEquals;
 
 public class MethodReflectorTest {
-	private MethodReflector<MyClass> sut;
-	private MyClass myClass;
+	private MethodReflector<ClassA> sut;
+	private ClassA obj;
 
-	public static class MyClass {
+	public static class ClassA {
 		int m1() { return 1;}
 		void m2() { m4(); }
 		int m3(int a, int b) { return a+b; }
@@ -21,24 +21,24 @@ public class MethodReflectorTest {
 
 	@Before
 	public void before() {
-		myClass = new MyClass();
-		sut = new MethodReflector<>(myClass);
+		obj = new ClassA();
+		sut = new MethodReflector<>(obj);
 	}
 
 	@Test
 	public void testCallFunction() {
-		assertEquals(Integer.valueOf(myClass.m1()), sut.callFunction("m1"));
+		assertEquals(Integer.valueOf(obj.m1()), sut.callFunction("m1"));
 	}
 
 	@Test
 	public void testCallVoid() {
-		myClass.m2();
+		obj.m2();
 		sut.callVoid("m2");
 	}
 
 	@Test
 	public void callFunctionWithArgs() {
-		assertEquals(Integer.valueOf(myClass.m3(4,5)), sut.callFunction("m3", 4, 5));
+		assertEquals(Integer.valueOf(obj.m3(4,5)), sut.callFunction("m3", 4, 5));
 	}
 
 	@Test

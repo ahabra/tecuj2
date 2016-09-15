@@ -9,7 +9,6 @@ public class PropertyReflectorTest {
 		int a= 1;
 		String getName() {return "joe"; }
 		String food() { return "egg"; }
-
 	}
 
 	private PropertyReflector<ClassA> sut;
