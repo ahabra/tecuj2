@@ -1,8 +1,9 @@
 package com.tek271.util2.reflection;
 
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class MethodReflectorTest {
 	private MethodReflector sut;
@@ -17,7 +18,7 @@ public class MethodReflectorTest {
 	@Before
 	public void before() {
 		myClass = new MyClass();
-		sut = new MethodReflector<MyClass>(myClass);
+		sut = new MethodReflector<>(myClass);
 	}
 
 	@Test

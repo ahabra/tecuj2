@@ -2,13 +2,17 @@ package com.tek271.util2.reflection;
 
 import org.joor.Reflect;
 
-import static org.joor.Reflect.*;
+import static org.joor.Reflect.on;
 
-public class MethodReflector<OBJ> {
+public class MethodReflector<T> {
 	private final Reflect reflect;
 
-	public MethodReflector(OBJ obj) {
-		reflect = on(obj);
+	public MethodReflector(Reflect reflect) {
+		this.reflect = reflect;
+	}
+
+	public MethodReflector(T obj) {
+		this(on(obj));
 	}
 
 	public <R> R callFunction(String methodName, Object... args) {
