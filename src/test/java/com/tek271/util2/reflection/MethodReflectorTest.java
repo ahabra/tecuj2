@@ -3,16 +3,20 @@ package com.tek271.util2.reflection;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.reflect.Method;
+import java.util.Set;
+
 import static org.junit.Assert.assertEquals;
 
 public class MethodReflectorTest {
-	private MethodReflector sut;
+	private MethodReflector<MyClass> sut;
 	private MyClass myClass;
 
 	public static class MyClass {
 		int m1() { return 1;}
-		void m2() {}
-		int m3(int a, int b) { return a+b;}
+		void m2() { m4(); }
+		int m3(int a, int b) { return a+b; }
+		private boolean m4() { return true; }
 	}
 
 	@Before
@@ -23,7 +27,7 @@ public class MethodReflectorTest {
 
 	@Test
 	public void testCallFunction() {
-		assertEquals(myClass.m1(), sut.callFunction("m1"));
+		assertEquals(Integer.valueOf(myClass.m1()), sut.callFunction("m1"));
 	}
 
 	@Test
@@ -34,7 +38,24 @@ public class MethodReflectorTest {
 
 	@Test
 	public void callFunctionWithArgs() {
-		assertEquals(myClass.m3(4,5), sut.callFunction("m3", 4, 5));
+		assertEquals(Integer.valueOf(myClass.m3(4,5)), sut.callFunction("m3", 4, 5));
 	}
+
+	@Test
+	public void testGetMethods() {
+		Set<Method> methods = sut.excludeObjectMethods().getMethods();
+		System.out.println(methods);
+		assertEquals(4, methods.size());
+	}
+
+	@Test
+	public void testGetMethodsWithExclusions() {
+		Set<Method> methods = sut
+				.excludeInheritedMethods()
+				.excludeScope(ScopeEnum.PRIVATE)
+				.getMethods();
+		assertEquals(3, methods.size());
+	}
+
 
 }

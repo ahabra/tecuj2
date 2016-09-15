@@ -75,12 +75,8 @@ public class FieldReflector<T> {
 	private boolean isExcluded(Field field) {
 		if (excludedFieldNames.contains(field.getName())) return true;
 
-		ScopeEnum scope = scopeOf(field);
+		ScopeEnum scope = ScopeEnum.scopeOf(field);
 		return excludedScopes.contains(scope);
-	}
-
-	public ScopeEnum scopeOf(Field field) {
-		return ScopeEnum.find(field.getModifiers());
 	}
 
 	public Map<String, Object> toMap() {

@@ -12,7 +12,7 @@ public class Reflector<T> {
 	public Reflector(T obj) {
 		fieldReflector = new FieldReflector<>(obj);
 		Reflect reflect = on(obj);
-		methodReflector = new MethodReflector(reflect);
+		methodReflector = new MethodReflector<>(obj, reflect);
 	}
 
 
