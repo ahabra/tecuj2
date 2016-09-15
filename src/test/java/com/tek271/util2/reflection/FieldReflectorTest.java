@@ -4,6 +4,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.*;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
@@ -59,6 +60,12 @@ public class FieldReflectorTest {
 		assertEquals(Pair.of("b", obj.b), pairs[1]);
 		assertEquals(Pair.of("c", obj.c), pairs[2]);
 		assertEquals(Pair.of("d", ClassA.d), pairs[3]);
+	}
+
+	@Test
+	public void testGetFields() {
+		List<String> fields = sut.getFields();
+		assertEquals(4, fields.size());
 	}
 
 }

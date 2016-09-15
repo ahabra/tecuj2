@@ -28,6 +28,7 @@ public class MethodReflectorTest {
 
 	@Test
 	public void testCallVoid() {
+		myClass.m2();
 		sut.callVoid("m2");
 	}
 

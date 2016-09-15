@@ -72,7 +72,7 @@ public class FieldReflector<T> {
 		return this;
 	}
 
-	public boolean isExcluded(Field field) {
+	private boolean isExcluded(Field field) {
 		if (excludedFieldNames.contains(field.getName())) return true;
 
 		ScopeEnum scope = scopeOf(field);
@@ -105,6 +105,15 @@ public class FieldReflector<T> {
 		List<Pair<String, Object>> list = toPairs();
 		//noinspection unchecked
 		return list.toArray( new Pair[list.size()] );
+	}
+
+	public List<String> getFields() {
+		Field[] fields = obj.getClass().getDeclaredFields();
+		List<String> names= new ArrayList<>();
+		for (Field f: fields) {
+			names.add(f.getName());
+		}
+		return names;
 	}
 
 }
