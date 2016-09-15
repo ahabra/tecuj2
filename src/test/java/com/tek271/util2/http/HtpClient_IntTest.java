@@ -4,6 +4,7 @@ import org.junit.*;
 
 import static org.junit.Assert.*;
 
+@Ignore
 public class HtpClient_IntTest {
 	private static final String URL_HTTP = "http://www.example.com/";
 	private static final String URL_HTTPS = "https://www.example.com/";
