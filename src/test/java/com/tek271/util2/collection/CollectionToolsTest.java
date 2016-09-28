@@ -1,9 +1,11 @@
 package com.tek271.util2.collection;
 
+import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
@@ -49,6 +51,17 @@ public class CollectionToolsTest {
 
 		List<String> list = newArrayList("ab", "cd");
 		assertTrue(sut.contains(list, a-> a.startsWith("c")));
+	}
+
+	@Test
+	public void testToMapByKey() {
+		assertTrue(sut.toMapByKey("k").isEmpty());
+		Map<Integer, String> map = sut.toMapByKey("length", "a", "aa");
+		Map<Integer, String> expected = ImmutableMap.of(
+				1, "a",
+				2, "aa"
+		);
+		assertEquals(expected, map);
 	}
 
 }

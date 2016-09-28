@@ -1,10 +1,16 @@
 package com.tek271.util2.collection;
 
+import com.tek271.util2.reflection.PropertyReflector;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 public class CollectionTools {
 
@@ -39,6 +45,27 @@ public class CollectionTools {
 
 	public <T> boolean isEmpty(Collection<T> c) {
 		return c==null || c.isEmpty();
+	}
+
+	public <K, V> Map<K, V> toMapByKey(String key, Collection<V> col) {
+		if (StringUtils.isBlank(key)) {
+			throw new IllegalArgumentException("The argument 'key' cannot be [" + key + "].");
+		}
+		final String keyName = key.trim();
+		Map<K, V> map = new LinkedHashMap<>();
+		if (isEmpty(col)) return map;
+		col.forEach(v -> {
+			PropertyReflector<V> ref = new PropertyReflector<>(v);
+			K k = ref.get(keyName);
+			map.put(k, v);
+		});
+
+		return map;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <K, V> Map<K, V> toMapByKey(String key, V... col) {
+		return toMapByKey(key, newArrayList(col));
 	}
 
 }
