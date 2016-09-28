@@ -93,6 +93,15 @@ public class ListSearcherTest {
 	}
 
 	@Test
+	public void testIsPrefixArray() {
+		assertTrue(sut.isPrefix(0, 1));
+		assertTrue(sut.startIndex(1).maxIndex(3).isPrefix(1, 2));
+		assertFalse(sut.startIndex(1).maxIndex(2).isPrefix(1, 2));
+		assertTrue(sut.startIndex(1).maxIndex(2).reset().isPrefix(0, 1));
+		assertFalse(sut.isPrefix());
+	}
+
+	@Test
 	public void testMatcher() {
 		assertEquals(1, sut.indexOf(1));
 		assertEquals(3, sut.matcher((a,b)->a+b==7).indexOf(4));

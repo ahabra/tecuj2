@@ -1,7 +1,5 @@
 package com.tek271.util2.collection;
 
-import com.google.common.collect.Lists;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -119,6 +117,11 @@ public class ListSearcher<T> {
 			if (!eq(sub.get(i), target.get(i))) return false;
 		}
 		return true;
+	}
+
+	@SuppressWarnings("unchecked")
+	public boolean isPrefix(T... target) {
+		return isPrefix(newArrayList(target));
 	}
 
 	private boolean eq(T a, T b) {
