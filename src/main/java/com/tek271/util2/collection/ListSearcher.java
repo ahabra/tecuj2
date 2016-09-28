@@ -1,5 +1,7 @@
 package com.tek271.util2.collection;
 
+import com.google.common.collect.Lists;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -101,6 +103,11 @@ public class ListSearcher<T> {
 			startIndex = originalStartIndex;
 		}
 		return -1;
+	}
+
+	@SuppressWarnings("unchecked")
+	public int indexOfSubList(T... target) {
+		return indexOfSubList(newArrayList(target));
 	}
 
 	public boolean isPrefix(List<T> target) {

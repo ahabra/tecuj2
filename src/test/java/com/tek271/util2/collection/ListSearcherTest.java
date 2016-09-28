@@ -74,6 +74,16 @@ public class ListSearcherTest {
 	}
 
 	@Test
+	public void testIndexOfSubListArray() {
+		assertEquals(2, sut.indexOfSubList(2, 3));
+		assertEquals(3, sut.indexOfSubList(3, 4));
+		assertEquals(3, sut.matcher(Integer::equals).indexOfSubList(3, 4));
+		assertEquals(-1, sut.startIndex(2).indexOfSubList(1));
+		assertEquals(2, sut.startIndex(1).maxIndex(3).indexOfSubList(2));
+		assertEquals(-1, sut.startIndex(1).maxIndex(3).indexOfSubList(2, 3));
+	}
+
+	@Test
 	public void testIsPrefix() {
 		assertTrue(sut.isPrefix(newArrayList(0, 1)));
 		assertTrue(sut.startIndex(1).maxIndex(3).isPrefix(newArrayList(1, 2)));
