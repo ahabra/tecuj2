@@ -54,11 +54,10 @@ public class CollectionTools {
 		final String keyName = key.trim();
 		Map<K, V> map = new LinkedHashMap<>();
 		if (isEmpty(col)) return map;
-		col.forEach(v -> {
-			PropertyReflector<V> ref = new PropertyReflector<>(v);
-			K k = ref.get(keyName);
+		for (V v: col) {
+			K k = new PropertyReflector<>(v).get(keyName);
 			map.put(k, v);
-		});
+		}
 
 		return map;
 	}
