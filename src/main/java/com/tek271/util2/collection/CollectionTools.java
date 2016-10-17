@@ -7,10 +7,12 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Sets.newHashSet;
 
 public class CollectionTools {
 
@@ -22,7 +24,22 @@ public class CollectionTools {
 	}
 
 	public <T, C extends Collection<T>> C copy(C from) {
-		return ObjectUtils.clone(from);
+		if (from == null) return null;
+		if (from instanceof Cloneable) {
+			return ObjectUtils.clone(from);
+		}
+
+		C r = newSetOrList(from);
+		r.addAll(from);
+		return r;
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T, C extends Collection<T>> C newSetOrList(C c) {
+		if (c instanceof Set) {
+			return (C) newHashSet();
+		}
+		return (C) newArrayList();
 	}
 
 	public <T> boolean contains(Collection<T> col, T target, BiPredicate<T,T> matcher) {

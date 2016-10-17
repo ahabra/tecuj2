@@ -9,9 +9,8 @@ import java.util.Map;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static java.util.Collections.unmodifiableList;
+import static org.junit.Assert.*;
 
 public class CollectionToolsTest {
 	private static final List<Integer> LIST = newArrayList(0, 1, 2, 3);
@@ -33,6 +32,9 @@ public class CollectionToolsTest {
 		assertEquals(null, sut.copy(null));
 		assertEquals(LIST, sut.copy(LIST));
 		assertEquals(newHashSet("1", "a"), sut.copy(newHashSet("a", "1")));
+
+		List<String> list = unmodifiableList(newArrayList("a", "1"));
+		assertEquals(newArrayList("a", "1"), sut.copy(list));
 	}
 
 	@Test
