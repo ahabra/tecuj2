@@ -3,7 +3,6 @@ package com.tek271.util2.db;
 import com.tek271.util2.file.ResourceTools;
 import org.sql2o.Connection;
 import org.sql2o.Query;
-import org.sql2o.Sql2o;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,12 +10,10 @@ import java.util.Map;
 public abstract class DbAccessor<T extends DbAccessor> {
 	protected DbQueries queryCache = DbQueries.QUERY_CACHE;
 
-	protected String url, user, password;
+	protected DbConnection dbConnection = new DbConnection();
 	protected final Map<String, Object> parameters = new HashMap<>();
 	protected String sql;
 	protected String script;
-	protected Connection connection;
-	protected boolean isExternalConnection = false;
 
 	protected ResourceTools resourceTools = new ResourceTools();
 
@@ -27,24 +24,8 @@ public abstract class DbAccessor<T extends DbAccessor> {
 		thisObj = getThis();
 	}
 
-	public T withConnection(Connection connection) {
-		isExternalConnection = connection != null;
-		this.connection = connection;
-		return thisObj;
-	}
-
-	public T url(String url) {
-		this.url = url;
-		return thisObj;
-	}
-
-	public T user(String user) {
-		this.user = user;
-		return thisObj;
-	}
-
-	public T password(String password) {
-		this.password = password;
+	public T withDbConnection(DbConnection dbConnection) {
+		this.dbConnection = dbConnection;
 		return thisObj;
 	}
 
@@ -89,21 +70,6 @@ public abstract class DbAccessor<T extends DbAccessor> {
 
 	protected String getCachedQueryByName(String queryName) {
 		return queryCache.get(queryName);
-	}
-
-	private Sql2o sql2o() {
-		return new Sql2o(url, user, password);
-	}
-
-	public Connection getSql2oConnection() {
-		if (connection != null) {
-			return connection;
-		}
-		return sql2o().open();
-	}
-
-	public Connection transaction() {
-		return sql2o().beginTransaction();
 	}
 
 }

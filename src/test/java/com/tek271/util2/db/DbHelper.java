@@ -6,9 +6,10 @@ import java.util.List;
 public class DbHelper {
 
 	public static void configureDb(DbAccessor dbAccessor) {
-		dbAccessor.url("jdbc:hsqldb:mem:tecuj-test")
+		DbConnection dbConnection = new DbConnection().url("jdbc:hsqldb:mem:tecuj-test")
 				.user("SA")
 				.password("SA");
+		dbAccessor.withDbConnection(dbConnection);
 	}
 
 	public static List<PlayEntity> insertPlayEntities(PlayEntity... entities) {

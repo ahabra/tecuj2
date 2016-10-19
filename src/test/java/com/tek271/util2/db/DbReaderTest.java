@@ -25,13 +25,13 @@ public class DbReaderTest {
 
 	@Test
 	public void testBuilderProperties() {
-		sut.url("url1")
+		sut.dbConnection.url("url1")
 				.user("u1")
 				.password("p1");
 
-		assertEquals("url1", sut.url);
-		assertEquals("u1", sut.user);
-		assertEquals("p1", sut.password);
+		assertEquals("url1", sut.dbConnection.url);
+		assertEquals("u1", sut.dbConnection.user);
+		assertEquals("p1", sut.dbConnection.password);
 	}
 
 	@Test

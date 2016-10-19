@@ -24,7 +24,7 @@ public class DbWriter extends DbAccessor<DbWriter> {
 			writeScript();
 			return NO_KEY;
 		}
-		return isExternalConnection? write(connection) : writeAndClose();
+		return dbConnection.isLocal? writeAndClose() : write(dbConnection.sql2oConnection);
 	}
 
 	private long write(Connection con) {
@@ -37,22 +37,21 @@ public class DbWriter extends DbAccessor<DbWriter> {
 	}
 
 	private long writeAndClose() {
-		try (Connection con= getSql2oConnection()) {
+		try (Connection con= dbConnection.getSql2oConnection()) {
 			return write(con);
 		}
 	}
 
 	private void writeScript() {
 		Iterable<String> queries = Splitter.on(";\n").trimResults().omitEmptyStrings().split(script);
-		Connection con = getSql2oConnection();
-		DbWriter dbWriter = new DbWriter().withConnection(con);
+		DbWriter dbWriter = new DbWriter().withDbConnection(dbConnection);
 
 		try {
 			for (String sql: queries) {
 				dbWriter.sql(sql).write();
 			}
 		} finally {
-			if (!isExternalConnection) con.close();
+			dbConnection.closeIfCreated();
 		}
 	}
 

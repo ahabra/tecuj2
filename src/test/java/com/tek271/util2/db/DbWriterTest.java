@@ -28,13 +28,14 @@ public class DbWriterTest {
 	@Test
 	public void testTransaction() {
 		List<PlayEntity> entities = newArrayList(create(1), create(2));
-		try (Connection con = dbWriter.transaction()) {
+		try (Connection con = dbWriter.dbConnection.transaction()) {
+			DbConnection dbConnection = new DbConnection().with(con);
 			for (PlayEntity e: entities) {
 				e.id = dbWriter.param("name", e.name)
 						.param("date", e.date)
 						.sql(PlayEntity.INSERT_SQL)
 						.returnKeyAfterWrite(true)
-						.withConnection(con)
+						.withDbConnection(dbConnection)
 						.write();
 			}
 			con.commit();

@@ -18,7 +18,7 @@ public class DbReader<E> extends DbAccessor<DbReader<E>> {
 	}
 
 	public List<E> read() {
-		return isExternalConnection? read(connection) : readAndClose();
+		return dbConnection.isLocal? readAndClose() : read(dbConnection.sql2oConnection);
 	}
 
 	private List<E> read(Connection con) {
@@ -27,7 +27,7 @@ public class DbReader<E> extends DbAccessor<DbReader<E>> {
 	}
 
 	private List<E> readAndClose() {
-		try (Connection con = getSql2oConnection()) {
+		try (Connection con = dbConnection.getSql2oConnection()) {
 			return read(con);
 		}
 	}
