@@ -1,6 +1,5 @@
 package com.tek271.util2.db;
 
-import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,16 +25,13 @@ public class DbReaderTest {
 
 	@Test
 	public void testBuilderProperties() {
-		Map<String, String> namedQueries = new HashMap<>();
 		sut.url("url1")
 				.user("u1")
-				.password("p1")
-				.namedQueries(namedQueries);
+				.password("p1");
 
 		assertEquals("url1", sut.url);
 		assertEquals("u1", sut.user);
 		assertEquals("p1", sut.password);
-		assertEquals(namedQueries, sut.namedQueries);
 	}
 
 	@Test
@@ -60,18 +56,11 @@ public class DbReaderTest {
 
 	@Test
 	public void testReadNamedQuery() {
+		DbQueries.QUERY_CACHE.put("k1", "select * from PlayEntity");
 		List<PlayEntity> inserted = DbHelper.insertPlayEntities(3);
-		Map<String, String> map = ImmutableMap.of("k1", "select * from PlayEntity");
-		sut.namedQueries(map);
 
-		List<PlayEntity> found = sut.sqlFromNamedQuery("k1").read();
+		List<PlayEntity> found = sut.sqlFromCachedQuery("k1").read();
 		assertEquals(inserted, found);
-	}
-
-	@Test
-	public void testNamedQueriesFromYamlFile() {
-		sut.namedQueries("YamlToolsTest.yml");
-		assertEquals(2, sut.namedQueries.size());
 	}
 
 }

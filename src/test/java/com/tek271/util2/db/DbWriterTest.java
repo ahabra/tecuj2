@@ -1,12 +1,10 @@
 package com.tek271.util2.db;
 
-import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 import org.sql2o.Connection;
 
 import java.util.List;
-import java.util.Map;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.tek271.util2.db.PlayEntity.create;
@@ -47,13 +45,12 @@ public class DbWriterTest {
 
 	@Test
 	public void testWriteNamedQuery() {
-		Map<String, String> map = ImmutableMap.of("k1", PlayEntity.INSERT_SQL);
+		DbQueries.QUERY_CACHE.put("k1", PlayEntity.INSERT_SQL);
 		PlayEntity playEntity = create(1);
 		dbWriter
-				.namedQueries(map)
 				.param("name", playEntity.name)
 				.param("date", playEntity.date)
-				.sqlFromNamedQuery("k1")
+				.sqlFromCachedQuery("k1")
 				.write();
 		List<PlayEntity> found = dbReader.sql("select * from PlayEntity").read();
 		assertEquals(1, found.size());
@@ -62,13 +59,12 @@ public class DbWriterTest {
 
 	@Test
 	public void testWriteNamedQueryAndGetId() {
-		Map<String, String> map = ImmutableMap.of("k1", PlayEntity.INSERT_SQL);
+		DbQueries.QUERY_CACHE.put("k1", PlayEntity.INSERT_SQL);
 		PlayEntity playEntity = create(1);
 		long id = dbWriter
-				.namedQueries(map)
 				.param("name", playEntity.name)
 				.param("date", playEntity.date)
-				.sqlFromNamedQuery("k1")
+				.sqlFromCachedQuery("k1")
 				.returnKeyAfterWrite(true)
 				.write();
 		List<PlayEntity> found = dbReader.sql("select * from PlayEntity").read();

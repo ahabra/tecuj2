@@ -1,7 +1,6 @@
 package com.tek271.util2.db;
 
 import com.tek271.util2.file.ResourceTools;
-import com.tek271.util2.file.YamlTools;
 import org.sql2o.Connection;
 import org.sql2o.Query;
 import org.sql2o.Sql2o;
@@ -10,9 +9,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class DbAccessor<T extends DbAccessor> {
+	protected DbQueries queryCache = DbQueries.QUERY_CACHE;
+
 	protected String url, user, password;
 	protected final Map<String, Object> parameters = new HashMap<>();
-	protected Map<String, String> namedQueries;
 	protected String sql;
 	protected String script;
 	protected Connection connection;
@@ -48,17 +48,6 @@ public abstract class DbAccessor<T extends DbAccessor> {
 		return thisObj;
 	}
 
-	public T namedQueries(Map<String, String> namedQueries) {
-		this.namedQueries = namedQueries;
-		return thisObj;
-	}
-
-	public T namedQueries(String yamlFileName) {
-		YamlTools yamlTools = new YamlTools();
-		Map<String, String> map = yamlTools.readFile(yamlFileName);
-		return namedQueries(map);
-	}
-
 	public T param(String name, Object value) {
 		parameters.put(name, value);
 		return thisObj;
@@ -75,8 +64,8 @@ public abstract class DbAccessor<T extends DbAccessor> {
 		return thisObj;
 	}
 
-	public T sqlFromNamedQuery(String queryName) {
-		return sql(getQueryByName(queryName));
+	public T sqlFromCachedQuery(String queryName) {
+		return sql(getCachedQueryByName(queryName));
 	}
 
 	public T script(String script) {
@@ -98,8 +87,8 @@ public abstract class DbAccessor<T extends DbAccessor> {
 		return query;
 	}
 
-	protected String getQueryByName(String queryName) {
-		return namedQueries.get(queryName);
+	protected String getCachedQueryByName(String queryName) {
+		return queryCache.get(queryName);
 	}
 
 	private Sql2o sql2o() {
