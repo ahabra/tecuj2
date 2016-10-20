@@ -2,7 +2,9 @@ package com.tek271.util2.http;
 
 public enum HtpMediaType {
 	textPlain("text/plain"),
-	textHtml("text/html");
+	textHtml("text/html"),
+	textXml("text/xml"),
+	json("application/json");
 
 	public final String text;
 
