@@ -1,5 +1,7 @@
 package com.tek271.util2.db;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
@@ -7,6 +9,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class DbConnection {
+	private static final Logger LOGGER = LogManager.getLogger(DbConnection.class);
 	String url, user, password;
 	Connection sql2oConnection;
 	boolean isLocal = true;
@@ -45,6 +48,7 @@ public class DbConnection {
 	}
 
 	private Sql2o sql2o() {
+		LOGGER.debug("Connecting to " + url + " for user=" + user);
 		return new Sql2o(url, user, password);
 	}
 

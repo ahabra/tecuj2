@@ -1,6 +1,8 @@
 package com.tek271.util2.db;
 
 import com.tek271.util2.file.ResourceTools;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.sql2o.Connection;
 import org.sql2o.Query;
 
@@ -8,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class DbAccessor<T extends DbAccessor> {
+	private static final Logger LOGGER = LogManager.getLogger(DbAccessor.class);
 	protected DbQueries queryCache = DbQueries.QUERY_CACHE;
 
 	protected DbConnection dbConnection = new DbConnection();
@@ -61,6 +64,7 @@ public abstract class DbAccessor<T extends DbAccessor> {
 	}
 
 	protected Query createQuery(Connection con) {
+		LOGGER.debug(sql);
 		Query query = con.createQuery(sql);
 		if (parameters != null) {
 			parameters.forEach(query::addParameter);
