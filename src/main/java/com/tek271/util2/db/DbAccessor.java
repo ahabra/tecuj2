@@ -13,7 +13,7 @@ public abstract class DbAccessor<T extends DbAccessor> {
 	private static final Logger LOGGER = LogManager.getLogger(DbAccessor.class);
 	protected DbQueries queryCache = DbQueries.QUERY_CACHE;
 
-	protected DbConnection dbConnection = new DbConnection();
+	protected DbConnection dbConnection;
 	protected final Map<String, Object> parameters = new HashMap<>();
 	protected String sql;
 	protected String script;
@@ -63,9 +63,9 @@ public abstract class DbAccessor<T extends DbAccessor> {
 		return script(text);
 	}
 
-	protected Query createQuery(Connection con) {
+	protected Query createQuery(DbConnection con) {
 		LOGGER.debug(sql);
-		Query query = con.createQuery(sql);
+		Query query = con.sql2oConnection.createQuery(sql);
 		if (parameters != null) {
 			parameters.forEach(query::addParameter);
 		}

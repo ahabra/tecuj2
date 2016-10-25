@@ -1,7 +1,6 @@
 package com.tek271.util2.db;
 
 import com.google.common.base.Splitter;
-import org.sql2o.Connection;
 import org.sql2o.Query;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -24,35 +23,32 @@ public class DbWriter extends DbAccessor<DbWriter> {
 			writeScript();
 			return NO_KEY;
 		}
-		return dbConnection.isLocal? writeAndClose() : write(dbConnection.sql2oConnection);
+		boolean isConnected = dbConnection.isConnected();
+		if (!isConnected) dbConnection.connect();
+		long key = write(dbConnection);
+		if (!isConnected) dbConnection.close();
+		return key;
 	}
 
-	private long write(Connection con) {
+	private long write(DbConnection con) {
 		Query query = createQuery(con);
 		query.executeUpdate();
 		if (isReturnKey) {
-			return con.getKey(long.class);
+			return con.sql2oConnection.getKey(long.class);
 		}
 		return NO_KEY;
 	}
 
-	private long writeAndClose() {
-		try (Connection con= dbConnection.getSql2oConnection()) {
-			return write(con);
-		}
-	}
-
 	private void writeScript() {
 		Iterable<String> queries = Splitter.on(";\n").trimResults().omitEmptyStrings().split(script);
+		boolean isConnected = dbConnection.isConnected();
+		if (!isConnected) dbConnection.connect();
 		DbWriter dbWriter = new DbWriter().withDbConnection(dbConnection);
 
-		try {
-			for (String sql: queries) {
-				dbWriter.sql(sql).write();
-			}
-		} finally {
-			dbConnection.closeIfCreated();
+		for (String sql: queries) {
+			dbWriter.sql(sql).write();
 		}
+		if (!isConnected) dbConnection.close();
 	}
 
 }

@@ -1,6 +1,5 @@
 package com.tek271.util2.db;
 
-import org.sql2o.Connection;
 import org.sql2o.Query;
 
 import java.util.List;
@@ -18,16 +17,16 @@ public class DbReader<E> extends DbAccessor<DbReader<E>> {
 	}
 
 	public List<E> read() {
-		return dbConnection.isLocal? readAndClose() : read(dbConnection.sql2oConnection);
+		return dbConnection.isConnected()? read(dbConnection) : readAndClose();
 	}
 
-	private List<E> read(Connection con) {
+	private List<E> read(DbConnection con) {
 		Query query = createQuery(con);
 		return query.executeAndFetch(entityType);
 	}
 
 	private List<E> readAndClose() {
-		try (Connection con = dbConnection.getSql2oConnection()) {
+		try (DbConnection con = dbConnection.connect()) {
 			return read(con);
 		}
 	}

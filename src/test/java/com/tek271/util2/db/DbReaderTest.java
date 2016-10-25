@@ -24,17 +24,6 @@ public class DbReaderTest {
 	}
 
 	@Test
-	public void testBuilderProperties() {
-		sut.dbConnection.url("url1")
-				.user("u1")
-				.password("p1");
-
-		assertEquals("url1", sut.dbConnection.url);
-		assertEquals("u1", sut.dbConnection.user);
-		assertEquals("p1", sut.dbConnection.password);
-	}
-
-	@Test
 	public void testParams() {
 		Map<String, Object> map = new HashMap<>();
 		map.put("k1", "v1");

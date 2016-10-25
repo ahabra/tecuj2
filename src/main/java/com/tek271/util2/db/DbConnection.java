@@ -6,16 +6,14 @@ import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
 import java.util.Map;
-import java.util.function.Supplier;
 
 import static org.apache.commons.lang3.StringUtils.substringBefore;
 
 public class DbConnection implements AutoCloseable {
 	private static final Logger LOGGER = LogManager.getLogger(DbConnection.class);
-	String url, user, password;
-	Connection sql2oConnection;
-	boolean isLocal = true;
-	boolean isTransaction = false;
+	private String url, user, password;
+	protected Connection sql2oConnection;
+	private boolean isTransaction = false;
 
 	public DbConnection url(String url) {
 		this.url = url;
@@ -41,35 +39,15 @@ public class DbConnection implements AutoCloseable {
 	}
 
 	public DbConnection connect() {
-		sql2oConnection = sql2o().open();
+		if (sql2oConnection == null) {
+			sql2oConnection = sql2o().open();
+		}
 		return this;
-	}
-
-	public DbConnection with(Connection sql2oConnection) {
-		isLocal = sql2oConnection == null;
-		this.sql2oConnection = sql2oConnection;
-		return this;
-	}
-
-	public DbConnection with(Supplier<Connection> connectionSupplier) {
-		return with(connectionSupplier.get());
 	}
 
 	private Sql2o sql2o() {
 		LOGGER.debug("Connecting to db: " + substringBefore(url, "?") + " for user=" + user);
 		return new Sql2o(url, user, password);
-	}
-
-	public Connection getSql2oConnection() {
-		if (sql2oConnection != null) {
-			return sql2oConnection;
-		}
-		return sql2o().open();
-	}
-
-	public DbConnection closeIfCreated() {
-		if (isLocal) close();
-		return this;
 	}
 
 	public void close() {
@@ -82,7 +60,6 @@ public class DbConnection implements AutoCloseable {
 
 	public DbConnection transaction() {
 		isTransaction = true;
-		isLocal = false;
 		sql2oConnection = sql2o().beginTransaction();
 		return this;
 	}
@@ -99,6 +76,10 @@ public class DbConnection implements AutoCloseable {
 			sql2oConnection.rollback();
 		}
 		return this;
+	}
+
+	public boolean isConnected() {
+		return sql2oConnection != null;
 	}
 
 }
