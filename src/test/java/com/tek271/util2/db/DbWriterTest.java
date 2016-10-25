@@ -2,7 +2,6 @@ package com.tek271.util2.db;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.sql2o.Connection;
 
 import java.util.List;
 
@@ -28,14 +27,13 @@ public class DbWriterTest {
 	@Test
 	public void testTransaction() {
 		List<PlayEntity> entities = newArrayList(create(1), create(2));
-		try (Connection con = dbWriter.dbConnection.transaction()) {
-			DbConnection dbConnection = new DbConnection().with(con);
+		try (DbConnection con = dbWriter.dbConnection.transaction()) {
 			for (PlayEntity e: entities) {
 				e.id = dbWriter.param("name", e.name)
 						.param("date", e.date)
 						.sql(PlayEntity.INSERT_SQL)
 						.returnKeyAfterWrite(true)
-						.withDbConnection(dbConnection)
+						.withDbConnection(con)
 						.write();
 			}
 			con.commit();
