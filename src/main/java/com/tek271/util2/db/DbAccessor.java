@@ -1,9 +1,9 @@
 package com.tek271.util2.db;
 
 import com.tek271.util2.file.ResourceTools;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.sql2o.Connection;
 import org.sql2o.Query;
 
 import java.util.HashMap;
@@ -73,7 +73,16 @@ public abstract class DbAccessor<T extends DbAccessor> {
 	}
 
 	protected String getCachedQueryByName(String queryName) {
-		return queryCache.get(queryName);
+		String msg1 = " Please make sure that you spelled it right.";
+		String sql = queryCache.get(queryName);
+		if (sql==null) {
+			throw new IllegalArgumentException("queryName=" + queryName + " is not found in the queryCache." + msg1);
+		}
+		if (StringUtils.isBlank(sql)) {
+			throw new IllegalArgumentException("queryName=" + queryName + " has no associated SQL query." +	msg1);
+		}
+
+		return sql;
 	}
 
 }
