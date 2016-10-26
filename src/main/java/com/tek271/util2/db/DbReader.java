@@ -3,6 +3,7 @@ package com.tek271.util2.db;
 import org.sql2o.Query;
 
 import java.util.List;
+import java.util.Map;
 
 public class DbReader<E> extends DbAccessor<DbReader<E>> {
 	private final Class<E> entityType;
@@ -31,5 +32,19 @@ public class DbReader<E> extends DbAccessor<DbReader<E>> {
 		}
 	}
 
+	public List<Map<String, Object>> readMaps() {
+		return dbConnection.isConnected()? readMaps(dbConnection) :  readMapsAnClose();
+	}
+
+	private List<Map<String, Object>> readMaps(DbConnection con) {
+		Query query = createQuery(con);
+		return query.executeAndFetchTable().asList();
+	}
+
+	private List<Map<String, Object>> readMapsAnClose() {
+		try (DbConnection con = dbConnection.connect()) {
+			return readMaps(con);
+		}
+	}
 
 }

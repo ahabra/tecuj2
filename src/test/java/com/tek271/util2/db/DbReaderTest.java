@@ -52,4 +52,21 @@ public class DbReaderTest {
 		assertEquals(inserted, found);
 	}
 
+	@Test
+	public void testReadMaps() {
+		List<PlayEntity> inserted = DbHelper.insertPlayEntities(3);
+		List<Map<String, Object>> found = sut
+				.sql("select * from PlayEntity")
+				.readMaps();
+
+		assertEquals(inserted.size(), found.size());
+		for(int i=0; i<inserted.size(); i++) {
+			PlayEntity expected = inserted.get(i);
+			Map<String, Object> actual = found.get(i);
+			assertEquals(expected.id, ((Integer)actual.get("id")).intValue());
+			assertEquals(expected.name, actual.get("name"));
+			assertEquals(expected.date, actual.get("date"));
+		}
+	}
+
 }
