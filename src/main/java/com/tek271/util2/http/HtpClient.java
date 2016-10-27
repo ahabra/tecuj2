@@ -1,11 +1,15 @@
 package com.tek271.util2.http;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 
 public class HtpClient {
+	private static final Logger LOGGER = LogManager.getLogger(HtpClient.class);
+
 	public final HtpRequest htpRequest = new HtpRequest();
 
 	public HtpClient url(String text) {
@@ -48,6 +52,7 @@ public class HtpClient {
 	}
 
 	private HtpResponse run() {
+		LOGGER.debug(htpRequest.htpMethod + " " + htpRequest.url.toString());
 		HttpClient httpClient = createHttpClient();
 		start(httpClient);
 		Request request = httpClient.newRequest(htpRequest.url.getText())
