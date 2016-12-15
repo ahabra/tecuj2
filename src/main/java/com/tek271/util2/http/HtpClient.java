@@ -7,10 +7,14 @@ import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 
+import java.util.concurrent.TimeUnit;
+
 public class HtpClient {
 	private static final Logger LOGGER = LogManager.getLogger(HtpClient.class);
 
 	public final HtpRequest htpRequest = new HtpRequest();
+	public long timeout = 30;
+	public TimeUnit timeoutUnit = TimeUnit.SECONDS;
 
 	public HtpClient url(String text) {
 		htpRequest.url(text);
@@ -41,6 +45,12 @@ public class HtpClient {
 		return this;
 	}
 
+	public HtpClient timeout(long timeout, TimeUnit timeoutUnit) {
+		this.timeout = timeout;
+		this.timeoutUnit = timeoutUnit;
+		return this;
+	}
+
 	public HtpResponse get() {
 		htpRequest.htpMethod = HtpMethod.GET;
 		return run();
@@ -56,7 +66,9 @@ public class HtpClient {
 		HttpClient httpClient = createHttpClient();
 		start(httpClient);
 		Request request = httpClient.newRequest(htpRequest.url.getText())
-				.method(htpRequest.htpMethod.toString());
+				.method(htpRequest.htpMethod.toString())
+				.timeout(timeout, timeoutUnit);
+
 		htpRequest.addHeadersToRequest(request);
 		htpRequest.setPostRequestBody(request);
 		ContentResponse contentResponse = send(request);
