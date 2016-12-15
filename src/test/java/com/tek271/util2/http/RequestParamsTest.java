@@ -33,7 +33,7 @@ public class RequestParamsTest {
 		checkResult(1, Pair.of("a", ""));
 
 		sut.parse("a");
-		checkResult(1, Pair.of("a", ""));
+		checkResult(1, Pair.of(null, "a"));
 
 		sut.parse(" a =1 ");
 		checkResult(1, Pair.of("a", "1"));

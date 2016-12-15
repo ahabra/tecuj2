@@ -13,8 +13,8 @@ public class HtpClient {
 	private static final Logger LOGGER = LogManager.getLogger(HtpClient.class);
 
 	public final HtpRequest htpRequest = new HtpRequest();
-	public long timeout = 30;
-	public TimeUnit timeoutUnit = TimeUnit.SECONDS;
+	long timeout = 30;
+	TimeUnit timeoutUnit = TimeUnit.SECONDS;
 
 	public HtpClient url(String text) {
 		htpRequest.url(text);

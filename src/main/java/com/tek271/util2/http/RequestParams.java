@@ -32,6 +32,10 @@ public class RequestParams extends ListOfPairs<String, String> {
 	}
 
 	public RequestParams addTerm(String term) {
+		if (!StringUtils.contains(term, EQ)) {
+			add(null, term);
+			return this;
+		}
 		String k = substringBefore(term, EQ).trim();
 		String v = substringAfter(term, EQ);
 		add(k, v);
@@ -52,14 +56,16 @@ public class RequestParams extends ListOfPairs<String, String> {
 		String k = term.getKey();
 		String v = term.getValue();
 		if (excludedParams.contains(k)) {
-			return k + EQ + MASK;
+			v = MASK;
 		}
+		if (k==null) return v;
 		return k + EQ + v;
 	}
 
 	private String termToStringEncoded(Pair<String, String> term) {
 		String k = term.getKey();
 		String v = escapeTools.escapeUrl(term.getValue());
+		if (k==null) return v;
 		return k + EQ + v;
 	}
 
