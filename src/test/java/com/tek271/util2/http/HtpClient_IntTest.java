@@ -42,9 +42,9 @@ public class HtpClient_IntTest {
 
 	@Test
 	public void testPost() {
-		HtpResponse htpResponse = sut.url(URL_HTTP).textToPost("hi").post();
+		HtpResponse htpResponse = sut.url("http://httpbin.org/post").textToPost("hi").post();
 		assertTrue(htpResponse.isSuccess);
-		assertTrue(htpResponse.text.contains("<title>Example Domain</title>"));
+		assertTrue(htpResponse.text.contains("\"data\": \"hi\""));
 	}
 
 	@Test
