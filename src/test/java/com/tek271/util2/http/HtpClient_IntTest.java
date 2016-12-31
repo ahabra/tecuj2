@@ -1,8 +1,11 @@
 package com.tek271.util2.http;
 
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @Ignore
 public class HtpClient_IntTest {
@@ -55,6 +58,5 @@ public class HtpClient_IntTest {
 			assertTrue(e.getMessage().contains("p=" + RequestParams.MASK));
 		}
 	}
-
 
 }

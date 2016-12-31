@@ -40,6 +40,16 @@ public class HtpClient {
 		return this;
 	}
 
+	public HtpClient requestParam(String name, String value) {
+		htpRequest.parameters.add(name, value);
+		return this;
+	}
+
+	public HtpClient requestContentType(HtpMediaType mediaType) {
+		htpRequest.htpMediaType = mediaType;
+		return this;
+	}
+
 	public HtpClient textToPost(String text) {
 		htpRequest.textToPost = text;
 		return this;
@@ -70,7 +80,7 @@ public class HtpClient {
 				.timeout(timeout, timeoutUnit);
 
 		htpRequest.addHeadersToRequest(request);
-		htpRequest.setPostRequestBody(request);
+		htpRequest.setRequestData(request);
 		ContentResponse contentResponse = send(request);
 		stop(httpClient);
 		return new HtpResponse(contentResponse);

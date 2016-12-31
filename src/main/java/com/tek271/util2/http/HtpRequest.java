@@ -12,6 +12,7 @@ public class HtpRequest {
 	Url url = new Url();
 	boolean trustAllSsl = false;
 	ListOfPairs<String, String> headers = new ListOfPairs<>();
+	ListOfPairs<String, String> parameters = new ListOfPairs<>();
 	String textToPost;
 	HtpMediaType htpMediaType = HtpMediaType.textPlain;
 
@@ -25,11 +26,12 @@ public class HtpRequest {
 		return this;
 	}
 
-	public HtpRequest setPostRequestBody(Request request) {
+	public HtpRequest setRequestData(Request request) {
 		if (textToPost != null && htpMethod==HtpMethod.POST) {
 			ContentProvider cp = new StringContentProvider(textToPost, StandardCharsets.UTF_8);
 			request.content(cp, htpMediaType.text);
 		}
+		parameters.forEach(request::param);
 		return this;
 	}
 

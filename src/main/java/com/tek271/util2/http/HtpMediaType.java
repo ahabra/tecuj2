@@ -4,7 +4,9 @@ public enum HtpMediaType {
 	textPlain("text/plain"),
 	textHtml("text/html"),
 	textXml("text/xml"),
-	json("application/json");
+	json("application/json"),
+	form("application/x-www-form-urlencoded"),
+	multipart("multipart/form-data");
 
 	public final String text;
 
