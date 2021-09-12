@@ -24,7 +24,7 @@ public class HtpResponseTest {
 
 	@Test
 	public void testToString() {
-		String expected = "HtpResponse[text=hi,type=text,status=200,reason=OK,isSuccess=true]";
+		String expected = "HtpResponse[isSuccess=true,reason=OK,status=200,text=hi,type=text]";
 		assertEquals(expected, sut.toString());
 	}
 
