@@ -1,6 +1,7 @@
 package com.tek271.util2.time;
 
-import com.tek271.util2.string.ToString;
+import com.tek271.util2.collection.ListOfPairs;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.time.DateUtils;
@@ -101,7 +102,27 @@ public class Time {
 
 	@Override
 	public String toString() {
-		return new ToString().exclude(EXCLUDED_FIELDS).toString(this);
+		ListOfPairs<String, Integer> fields = new ListOfPairs<>();
+		fields.add("year", year);
+		fields.add("month", month);
+		fields.add("day", day);
+		fields.add("hour", hour);
+		fields.add("minute", minute);
+		fields.add("second", second);
+		fields.add("nano", nano);
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("Time[");
+		fields.forEach(f -> {
+			String name = f.getKey();
+			sb.append(name).append('=').append(f.getValue());
+			if (!StringUtils.equals(name, "nano")) {
+				sb.append(',');
+			}
+		});
+		sb.append("]");
+
+		return sb.toString();
 	}
 
 	@Override

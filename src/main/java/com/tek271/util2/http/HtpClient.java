@@ -5,6 +5,8 @@ import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
+import org.eclipse.jetty.client.dynamic.HttpClientTransportDynamic;
+import org.eclipse.jetty.io.ClientConnector;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 
 import java.util.concurrent.TimeUnit;
@@ -87,14 +89,19 @@ public class HtpClient {
 	}
 
 	private HttpClient createHttpClient() {
-		HttpClient httpClient = new HttpClient(createSslContextFactory());
+		ClientConnector clientConnector = new ClientConnector();
+		clientConnector.setSslContextFactory(createSslContextFactory());
+		HttpClientTransportDynamic transport = new HttpClientTransportDynamic(clientConnector);
+
+		HttpClient httpClient = new HttpClient(transport);
+
 		httpClient.setFollowRedirects(false);
 		return httpClient;
 	}
 
-	private SslContextFactory createSslContextFactory() {
+	private SslContextFactory.Client createSslContextFactory() {
 		if (! htpRequest.trustAllSsl) return null;
-		SslContextFactory sslContextFactory = new SslContextFactory();
+		SslContextFactory.Client sslContextFactory = new SslContextFactory.Client();
 		sslContextFactory.setTrustAll(true);
 		return sslContextFactory;
 	}
