@@ -4,7 +4,7 @@
   <groupId>com.tek271.util2</groupId>
   <artifactId>tecuj2</artifactId>
   <packaging>jar</packaging>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.2</version>
   <name>tecuj2</name>
   <url>http://maven.apache.org</url>
 
@@ -153,11 +153,6 @@
 			<version>1.6.0</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-client</artifactId>
-			<version>11.0.6</version>
-		</dependency>
 
 		<dependency>
 			<!-- reflection library -->
