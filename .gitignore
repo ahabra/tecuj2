@@ -4,3 +4,4 @@ target/
 *.iml
 
 dependency-reduced-pom.xml
+maven-repo-info.md

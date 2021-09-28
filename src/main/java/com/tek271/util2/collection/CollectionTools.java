@@ -14,8 +14,10 @@ import java.util.function.Predicate;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
 
+/** Useful collection related functions */
 public class CollectionTools {
 
+	/** Copy a collection to another of the same type */
 	public <T, C extends Collection<T>> C copy(C from, C to) {
 		if (from == null) return null;
 		to.clear();
