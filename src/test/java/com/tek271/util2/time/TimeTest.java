@@ -1,18 +1,19 @@
 package com.tek271.util2.time;
 
-import org.junit.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TimeTest {
 	private Time sut;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		sut = new Time(2016, 1, 29, 13, 59, 58, 100000);
 	}

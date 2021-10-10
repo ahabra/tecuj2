@@ -1,21 +1,20 @@
 package com.tek271.util2.collection;
 
-import org.junit.Before;
-import org.junit.Test;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.emptyList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ListSearcherTest {
 	private static final List<Integer> LIST = newArrayList(0, 1, 2, 3, 4);
 	private ListSearcher<Integer> sut;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		sut = new ListSearcher<>(LIST);
 	}

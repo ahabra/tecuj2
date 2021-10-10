@@ -1,13 +1,14 @@
 package com.tek271.util2.reflection;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.junit.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FieldReflectorTest {
 	public static class ClassA {
@@ -20,7 +21,7 @@ public class FieldReflectorTest {
 	private ClassA obj;
 	private FieldReflector<ClassA> sut;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		obj = new ClassA();
 		sut = new FieldReflector<>(obj);

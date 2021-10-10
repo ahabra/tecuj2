@@ -1,11 +1,12 @@
 package com.tek271.util2.math;
 
-import org.junit.*;
+
+import org.junit.jupiter.api.Test;
 
 import static com.tek271.util2.math.HumanNumber.binary;
 import static com.tek271.util2.math.HumanNumber.binaryShort;
 import static com.tek271.util2.math.HumanNumber.standard;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class HumanNumberTest {
 

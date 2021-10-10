@@ -1,12 +1,12 @@
 package com.tek271.util2.reflection;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MethodReflectorTest {
 	private MethodReflector<ClassA> sut;
@@ -19,7 +19,7 @@ public class MethodReflectorTest {
 		private boolean m4() { return true; }
 	}
 
-	@Before
+	@BeforeEach
 	public void before() {
 		obj = new ClassA();
 		sut = new MethodReflector<>(obj);

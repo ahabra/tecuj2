@@ -2,11 +2,12 @@ package com.tek271.util2.string;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.junit.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ToStringTest {
 	@SuppressWarnings("unused")
@@ -19,7 +20,7 @@ public class ToStringTest {
 	private ToString sut;
 	private ClassA obj;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		sut = new ToString();
 		obj = new ClassA();

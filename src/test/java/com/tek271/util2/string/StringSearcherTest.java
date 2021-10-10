@@ -1,13 +1,15 @@
 package com.tek271.util2.string;
 
-import org.junit.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class StringSearcherTest {
 	private StringSearcher sut;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		sut = new StringSearcher();
 	}

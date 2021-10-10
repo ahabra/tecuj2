@@ -1,19 +1,19 @@
 package com.tek271.util2.collection;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ListOfPairsTest {
 	private ListOfPairs<Integer, String> sut;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		sut = new ListOfPairs<>();
 	}

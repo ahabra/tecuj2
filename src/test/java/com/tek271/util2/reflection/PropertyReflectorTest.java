@@ -1,8 +1,10 @@
 package com.tek271.util2.reflection;
 
-import org.junit.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class PropertyReflectorTest {
 	public static class ClassA {
@@ -21,7 +23,7 @@ public class PropertyReflectorTest {
 	private PropertyReflector<ClassA> sut;
 	private ClassA objA;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		objA = new ClassA();
 		sut = new PropertyReflector<>(objA);

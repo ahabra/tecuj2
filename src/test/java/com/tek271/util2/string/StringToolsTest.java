@@ -1,15 +1,16 @@
 package com.tek271.util2.string;
 
-import org.junit.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class StringToolsTest {
 	public static final String TEXT = "abcdef";
 
 	private StringTools sut;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		sut = new StringTools();
 	}

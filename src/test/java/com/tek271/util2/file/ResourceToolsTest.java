@@ -1,15 +1,17 @@
 package com.tek271.util2.file;
 
-import org.junit.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Properties;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class ResourceToolsTest {
 	private ResourceTools sut;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		sut = new ResourceTools();
 	}

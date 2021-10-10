@@ -1,8 +1,8 @@
 package com.tek271.util2.collection;
 
 import com.google.common.collect.ImmutableMap;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
@@ -10,13 +10,13 @@ import java.util.Map;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Collections.unmodifiableList;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CollectionToolsTest {
 	private static final List<Integer> LIST = newArrayList(0, 1, 2, 3);
 	private CollectionTools sut;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		sut = new CollectionTools();
 	}
@@ -29,7 +29,7 @@ public class CollectionToolsTest {
 
 	@Test
 	public void testCopy() {
-		assertEquals(null, sut.copy(null));
+		assertNull(sut.copy(null));
 		assertEquals(LIST, sut.copy(LIST));
 		assertEquals(newHashSet("1", "a"), sut.copy(newHashSet("a", "1")));
 
