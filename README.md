@@ -4,9 +4,8 @@
 Common Java utilities for everyday programming, compiled with Java 11.
 * Author: Abdul Habra
 
-The library contains classes grouped by package
 
-## `collection` Classes
+## `com.tek271.util2.collection` Classes
 
 ### `CollectionTools`
 Helper function to handle collections.
@@ -55,8 +54,7 @@ Handy functions to search lists
 * `List<T> right(int count)`: get the right most `count` elements of the list
 
 
-
-## `file` Classes
+## `com.tek271.util2.file` Classes
 
 ### `FileTools`
 File handling functions
@@ -82,7 +80,7 @@ Yaml files handling
 
 * `Map<String, String> readFile(String resourceName)`: Read a yaml file from resources into a Map.
 
-## `math` Classes
+## `com.tek271.util2.math` Classes
 Math related classes
 
 ### `FixedDecimal`
@@ -93,7 +91,7 @@ Represent an exact decimal number
 ### `HumanNumber`
 Represent a number in an easy to read string
 
-## `reflection`
+## `com.tek271.util2.reflection`
 Reflection related classes
 
 ### `FieldReflector`
@@ -114,7 +112,7 @@ Access fields, methods, and properties on an object
 ### `ScopeEnum`
 An enumeration of possible scopes: `private`, `protected`, `public`, and `package`.
 
-## `string`
+## `com.tek271.util2.string`
 String handling classes
 
 ### `EscapeTools`
@@ -133,7 +131,7 @@ Search a string
 ### `ToString`
 Make it easy to convert an object to a string
 
-## `time`
+## `com.tek271.util2.time`
 Time handling classes
 
 ### `Time`
