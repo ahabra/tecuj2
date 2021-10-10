@@ -27,12 +27,34 @@ Helper function to handle collections.
 A list where each item is a pair (tuple)
 
 ### `ListSearcher`
-Handy functions to search lists including `indexOf`, `lastIndexOf`, `indexOfAny`,
-`indexOfSubList`, and others.
+Handy functions to search lists
 
-### `ListTools`
-List-specific functions including `getLast`, `setLast`, `slice`, `subList`,
-`left`, and `right`.
+* `ListSearcher(List<T> source)`: define the list that will be searched
+* `startIndex(int startIndex)`: Specify the search start index
+* `maxIndex(int maxIndex)`: Specify the search max index
+* `reset()`: reset startIndex to 0, maxIndex to size, and matcher to null
+* `matcher(BiPredicate<T,T> matcher)`: define a matcher to be used when searching
+* `equalsMatcher()`: use a standard equality matcher. This is the default matcher
+* `List<T> subList()`: get a sub-list between start and max indexes
+* `List<T> slice(int count)`: get a slice from `startIndex` for a given count of elements
+* `int indexOf(T target)`: Find the index of first element that matches given target
+* `int lastIndexOf(T target)`: Find the index of last element that matches given target
+* `int indexOfAny(Collection<T> targets)`: Find the index of the first element that matches
+   any element in targets
+* `indexOfAny(T... targets)`: Find the index of the first element that matches
+  any element in targets
+* `int indexOfSubList(List<T> target)`: Find index of the first occurrence of the
+  given target list
+* `int indexOfSubList(T... target)`: Find index of the first occurrence of the
+  given target list
+* `boolean isPrefix(List<T> target)`: Check if given target is a prefix to the source list
+* `boolean isPrefix(T... target)`: Check if given target is a prefix to the source list
+* `T getLast()`: get the last element in the list
+* `ListSearcher<T> setLast(T value)`: set the value of last element in the list
+* `List<T> left(int count)`: get the left most `count` elements of the list
+* `List<T> right(int count)`: get the right most `count` elements of the list
+
+
 
 ## `file` Classes
 

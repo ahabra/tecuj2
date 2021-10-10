@@ -108,4 +108,42 @@ public class ListSearcherTest {
 		assertEquals(1, sut.equalsMatcher().indexOf(1));
 	}
 
+	@Test
+	void testGetLast() {
+		assertEquals(4, sut.getLast());
+	}
+
+	@Test
+	void testSetLast() {
+		sut.setLast(10);
+		assertEquals(10, LIST.get(4));
+	}
+
+	@Test
+	void testLeft() {
+		assertEquals(newArrayList(0, 1), sut.left(2));
+		assertEquals(LIST, sut.left(20));
+		assertEquals(newArrayList(), sut.left(0));
+		assertEquals(newArrayList(0), sut.left(1));
+		assertEquals(newArrayList(), sut.left(-1));
+	}
+
+	@Test
+	void testRight() {
+		assertEquals(newArrayList(), sut.right(0));
+		assertEquals(newArrayList(), sut.right(-1));
+		assertEquals(newArrayList(4), sut.right(1));
+		assertEquals(newArrayList(3, 4), sut.right(2));
+		assertEquals(LIST, sut.right(20));
+	}
+
+	@Test
+	void testSlice() {
+		sut.startIndex(0).slice(1);
+		assertEquals(newArrayList(0), sut.startIndex(0).slice(1));
+		assertEquals(newArrayList(0, 1), sut.startIndex(0).slice(2));
+		assertEquals(newArrayList(1, 2), sut.startIndex(1).slice(2));
+		assertEquals(newArrayList(4), sut.startIndex(4).slice(1));
+		assertEquals(newArrayList(4), sut.startIndex(4).slice(3));
+	}
 }

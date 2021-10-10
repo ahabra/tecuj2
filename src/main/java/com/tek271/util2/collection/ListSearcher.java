@@ -16,7 +16,7 @@ public class ListSearcher<T> {
 	private int startIndex;
 	private int maxIndex;
 	private BiPredicate<T,T> matcher;
-	private CollectionTools collectionTools = new CollectionTools();
+	private final CollectionTools collectionTools = new CollectionTools();
 
 	public ListSearcher(List<T> source) {
 		this.source = source;
@@ -57,6 +57,17 @@ public class ListSearcher<T> {
 	public List<T> subList() {
 		if (maxIndex < startIndex) return emptyList();
 		return source.subList(startIndex, maxIndex);
+	}
+
+	public List<T> slice(int count) {
+		return slice(startIndex, count);
+	}
+
+	private List<T> slice(int start, int count) {
+		start = Math.max(0, start);
+		count = Math.max(0, count);
+		int toIndex = Math.min(start + count, sourceSize);
+		return source.subList(start, toIndex);
 	}
 
 	public int indexOf(T target) {
@@ -135,5 +146,25 @@ public class ListSearcher<T> {
 	private boolean contains(Collection<T> col, T target) {
 		return collectionTools.contains(col, target, matcher);
 	}
+
+	public T getLast() {
+		return source.get(sourceSize - 1);
+	}
+
+	public ListSearcher<T> setLast(T value) {
+		source.set(sourceSize - 1, value);
+		return this;
+	}
+
+	public List<T> left(int count) {
+		return slice(0, count);
+	}
+
+	public List<T> right(int count) {
+		count = Math.max(0, count);
+		return slice(sourceSize - count, count);
+	}
+
+
 
 }
