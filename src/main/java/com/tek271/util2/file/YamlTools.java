@@ -13,12 +13,11 @@ public class YamlTools {
 	@VisibleForTesting
 	ResourceTools resourceTools = new ResourceTools();
 
-	public Map<String, String> readFile(String fileName) {
+	public Map<String, String> readFile(String resourceName) {
 		Map<String, String> result = new HashMap<>();
-		InputStream inputStream = resourceTools.readAsInputStream(fileName);
+		InputStream inputStream = resourceTools.readAsInputStream(resourceName);
 		Yaml yaml = new Yaml();
-		@SuppressWarnings("unchecked")
-		Map<String, String> ym = (Map<String, String>) yaml.load(inputStream);
+		Map<String, String> ym = yaml.load(inputStream);
 		if (ym==null) return result;
 
 		ym.forEach((k,v) -> result.put(k, trimToEmpty(v)));
